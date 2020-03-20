@@ -1,0 +1,13 @@
+StatusReport3: Updates
+
+J Bujarski: 
+  * The best way to determine the generated picture from the input text would be a web scraper.
+    * Pictures can be searched for from Google, and pixel-by-pixel broken down to determine what an "average" picture would be.
+    * Libraries to include: requests, BeautifulSoup
+  * Picture data can be stored in a 2d array, with ratios created for the downloaded pictures
+    * Thus, smaller pictures are spread out to cover as many pixels as larger pictures
+    * Average RGB values per pixel stored in an element
+    * Overall picture updated on completion of a picture being added.
+    * User can input the number of images to use for the "Average" creation
+      * Multiprocessing can be used to process several images at once.
+    * Libraries to include: pandas(?), matplotlib
