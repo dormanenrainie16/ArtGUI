@@ -10,4 +10,4 @@ J Bujarski:
     * Overall picture updated on completion of a picture being added.
     * User can input the number of images to use for the "Average" creation
       * Multiprocessing can be used to process several images at once.
-    * Libraries to include: pandas(?), matplotlib
+    * Libraries to include: pandas, matplotlib, multiprocessing, flask (!!!)
