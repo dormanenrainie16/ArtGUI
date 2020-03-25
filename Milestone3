@@ -11,3 +11,13 @@ J Bujarski:
     * User can input the number of images to use for the "Average" creation
       * Multiprocessing can be used to process several images at once.
     * Libraries to include: pandas, matplotlib, multiprocessing, flask (!!!)
+    
+    
+Betty Tannuzzo:
+  * Along with keeping the images in a 2D array, we can map certain images to words. 
+    * Perhaps we can do this by creating a dictionary with the words being searched as keys and the urls for images as values
+    * One downside to this is that we would have to limit the amount of words searched due to it being pretty impossible to have every 
+      word from the dictionary 
+    * We should probably search Google for it (as J mentioned above) and somehow save that image url to that specific word in the 
+      database
+  * Libraries to include: all the ones mentioned above, plus os, xgoogle, re, urlparse, GeoIP, sys
