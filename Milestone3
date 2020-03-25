@@ -20,4 +20,6 @@ Betty Tannuzzo:
       word from the dictionary 
     * We should probably search Google for it (as J mentioned above) and somehow save that image url to that specific word in the 
       database
-  * Libraries to include: all the ones mentioned above, plus os, xgoogle, re, urlparse, GeoIP, sys
+  * Libraries to include: all the ones mentioned above
+    * plus 
+      * os, xgoogle, re, urlparse, GeoIP, sys
