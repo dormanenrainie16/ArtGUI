@@ -23,3 +23,10 @@ Betty Tannuzzo:
   * Libraries to include: all the ones mentioned above
     * plus 
       * os, xgoogle, re, urlparse, GeoIP, sys
+      
+ Rainie Dormanen:
+  * We might also need to actually process the images to be used to develop the new images
+  * There are also pre-existing libraries that allow webscraping of Google, and Bing, etc... that might be of use to us for 
+  finding and saving images and their URLs into our Python Code
+    Libraries to include (potentially) :scikit-image, google_images_search, image_search, OpenCV
+      
