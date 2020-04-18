@@ -7,14 +7,17 @@ from create import *
 
 
 def main():
+    # Pass in a string to rand_seed
+    master = rand_seed("J_BUJARSKI", intensity=100)
+    view_pic(master)
+
+
+def merger():
     master = Image.Image()
     counter = 1
 
-
-# If you choose to use this sample file, you may want to change the path to a folder on your computer with 
-# pictures so you can see the result.
     for filename in os.listdir("/Users/jbujarski/Desktop/Everything/Pictures"):
-        if filename.endswith(".jpg"):
+        if filename.endswith(".jpg") or filename.endswith(".jpeg"):
             name = os.path.join('/Users/jbujarski/Desktop/Everything/Pictures/', filename)
             print(name)
             master = blender(name, master, counter)
