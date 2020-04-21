@@ -19,6 +19,7 @@ web.geometry("600x600")
 w = Label(web, text="Welcome to Pixel Art", font=("Ink Free", 36))
 w.pack()
 
+
 class Example(Frame):
     def __init__(self, master, *args):
         Frame.__init__(self, master, *args)
@@ -35,10 +36,10 @@ class Example(Frame):
         # Buttons
         frame = Frame(master)
         frame.pack(side=BOTTOM)
-        self.search_word_button = Button(frame, text="Search word")
-        self.search_word_button.pack(side=TOP,fill=X)
-        self.search_word_button = Button(frame, text="Search Image(s)")
-        self.search_word_button.pack(side=TOP,fill=X)
+        self.search_word_button = Button(frame, text="Search word", command=self.search_word)
+        self.search_word_button.pack(side=TOP, fill=X)
+        self.search_word_button = Button(frame, text="Search Image(s)", command=self.search_image)
+        self.search_word_button.pack(side=TOP, fill=X)
         self.button = Button(frame, text="QUIT", fg="red", command=frame.quit)
         self.button.pack(side=BOTTOM, fill=X)
 
@@ -50,6 +51,38 @@ class Example(Frame):
 
         self.background_image = ImageTk.PhotoImage(self.image)
         self.background.configure(image=self.background_image)
+
+    # opens new window to search for a word
+    def search_word(self):
+        try:
+            if win1.state() == "normal": win1.focus()
+        except NameError as e:
+            print(e)
+            win1 = tk.Toplevel()
+            win1.geometry("600x600")
+            win1["bg"] = "black"
+            lb = Label(win1, text="Enter a word to get pixel image", fg='red', font=("Ink Free", 26))
+            lb.pack()
+            frame = Frame(win1)
+            frame.pack(side=TOP)
+            entry = Entry(frame, bd=5)
+            entry.pack(side=TOP, fill=X)
+            Enter_button = Button(frame, text="Enter", font=("Times New Roman", 10))
+            Enter_button.pack(side=BOTTOM, fill=X)
+
+    # opens a new window to search for image(s)
+    def search_image(self):
+        try:
+            if win2.state() == "normal": win2.focus()
+        except NameError as e:
+            print(e)
+            win2 = tk.Toplevel()
+            win2.geometry("600x600")
+            win2["bg"] = "black"
+            lb = Label(win2, text="Enter an image or images to get word", fg='red', font=("Ink Free", 25))
+            lb.pack()
+            frame = Frame(win2)
+            frame.pack(side=BOTTOM)
 
 
 # background image
