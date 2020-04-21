@@ -76,3 +76,23 @@ def hue(var, pic, _w=1024, _h=768, intensity=1):
             hue_pic[i, j] = color
     hue_pic = Image.fromarray((hue_pic * 255).astype(np.uint8))
     return Image.blend(pic, hue_pic, 0.5)
+
+
+# negative:
+# convert a picture to the photo-negative version
+#   ALL VARIABLES REDUNDANT TO hue; SAME FUNCTIONALITY UNDER DIFFERENT PARAM.
+def negative(pic, _w=1024, _h=768, intensity=1):
+    neg_pic = np.ndarray((int(_h / intensity), int(_w / intensity), 3))
+    pict = load_pic(pic)
+    for i in range(0, int(_h / intensity)):
+        for j in range(0, int(_w / intensity)):
+            neg_pic[i, j] = pict[i, j]
+    return Image.fromarray((neg_pic * 255).astype(np.uint8))
+
+# Other fun ideas:
+# replace instances of a single color for another (i.e. every red becomes blue)
+# What if we could turn a picture into ASCII art?
+#   Use the "intensity" value we used earlier...
+#   Turn a photo to greyscale
+#   Shrink photo to more manageable size
+#   Depending on the darkness of the pixel, update with a certain ASCII value.
