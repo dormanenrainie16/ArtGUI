@@ -15,6 +15,7 @@ from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 web = tk.Tk()
 web.configure(background='Black')
 web.geometry("600x600")
+
 # title-label
 w = Label(web, text="Welcome to Pixel Art", font=("Ink Free", 36))
 w.pack()
@@ -26,7 +27,7 @@ class Example(Frame):
 
         self.image = Image.open("pixels.jpg")
         self.img_copy = self.image.copy()
-
+        self.entry = Entry()
         self.background_image = ImageTk.PhotoImage(self.image)
 
         self.background = Label(self, image=self.background_image)
@@ -43,6 +44,7 @@ class Example(Frame):
         self.button = Button(frame, text="QUIT", fg="red", command=frame.quit)
         self.button.pack(side=BOTTOM, fill=X)
 
+    # resize background image on main window
     def _resize_image(self, event):
         new_width = event.width
         new_height = event.height
@@ -65,10 +67,18 @@ class Example(Frame):
             lb.pack()
             frame = Frame(win1)
             frame.pack(side=TOP)
-            entry = Entry(frame, bd=5)
-            entry.pack(side=TOP, fill=X)
-            Enter_button = Button(frame, text="Enter", font=("Times New Roman", 10))
+            self.entry = Entry(frame, bd=5)
+            self.entry.pack(side=TOP, fill=X)
+            Enter_button = Button(frame, text="Enter", font=("Times New Roman", 10), command=self.entry_res)
             Enter_button.pack(side=BOTTOM, fill=X)
+
+    # Stores the results of the entry box (user input) and clears the entry box after
+    # Probably should do the algorithm in this function as well
+    def entry_res(self):
+        user_input = ""
+        user_input = self.entry.get()
+        #print(user_input)
+        self.entry.delete(0, END)
 
     # opens a new window to search for image(s)
     def search_image(self):
