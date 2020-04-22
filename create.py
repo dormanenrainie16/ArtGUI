@@ -4,8 +4,6 @@
 #
 import random
 
-import PIL
-
 from pic import *
 
 
@@ -18,11 +16,11 @@ from pic import *
 def blender(first, master, count, _w=1024, _h=768):
     a = 1 / count
 
-    one = Image.fromarray(load_pic(first, _w, _h))
+    one = Image.fromarray(load_pic(first)).resize(_w, _h)
     two = master
 
     if master.size == (0, 0):
-        two = Image.fromarray(load_pic(first, _w, _h))
+        two = Image.fromarray(load_pic(first)).resize(_w, _h)
 
     three = Image.blend(two, one, a)
     return three
@@ -95,13 +93,16 @@ def negative(pic, _w=1024, _h=768, intensity=1):
 # ascii:
 # convert a picture to a rudimentary ASCII translation
 def ascii_pic(pic, _w=1024, _h=768, intensity=1):
-    asc = np.array(Image.fromarray((load_pic(pic, int(_w * 2 / intensity), int(_h / intensity)))).convert("L"))
+    asc = Image.fromarray(load_pic(pic)).convert("L")
+    print(asc.width)
+    print(asc.height)
+    asc = np.array(asc.resize((int(asc.width * 2 / intensity), int(asc.height / intensity))))
+
     name = str.split(pic, ".")
     line = ""
     pic_txt = open(name[0] + ".txt", "w")
     for i in range(asc.shape[0]):
         for j in range(asc.shape[1]):
-            # asc[i, j] = switcher(int(asc[i, j] / 32))
             line = line.__add__(chr(switcher(int(asc[i, j] / 32))))  # print(line)
         pic_txt.write(line + "\n")
         line = ""
@@ -110,16 +111,33 @@ def ascii_pic(pic, _w=1024, _h=768, intensity=1):
 
 def switcher(choice):
     switch = {
-        0: 32,    # space
+        0: 32,  # space
         1: 9624,  # "▘"
         2: 9626,  # "▚"
         3: 9625,  # "▙"
         4: 9617,  # "░"
         5: 9618,  # "▒"
         6: 9619,  # "▓"
-        7: 9608   # "█"
+        7: 9608  # "█"
     }
     return switch.get(choice)
+
+
+def asc_cond(pic, _w=1024, _h=768, intensity=1):
+    asc = Image.fromarray(load_pic(pic)).convert("L")
+    print(asc.width)
+    print(asc.height)
+    asc = np.array(asc.resize((int(asc.width * 2 / intensity), int(asc.height / intensity))))
+
+    name = str.split(pic, ".")
+    line = ""
+    pic_txt = open(name[0] + ".txt", "w")
+    for i in range(asc.shape[0]):
+        for j in range(asc.shape[1]):
+            line = line.__add__(chr(switcher(int(asc[i, j] / 32))))  # print(line)
+        pic_txt.write(line + "\n")
+        line = ""
+    return asc
 
 # Other fun ideas:
 # replace instances of a single color for another (i.e. every red becomes blue)
