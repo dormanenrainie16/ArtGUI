@@ -7,12 +7,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 from PIL import Image
 
-
-def load_pic(name, wd, ht):
-    img = Image.open(name)
-    imgA = np.array(img.resize((wd, ht)))
-
-    return imgA
+load_pic = lambda name: np.array(Image.open(name))
 
 
 def view_pic(name):
