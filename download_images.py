@@ -5,71 +5,6 @@ Version 1
 Searches Google Chrome for images based on keyword and downloads image to directory
 '''
 
-'''
-from google_images_download import google_images_download
-response = google_images_download.googleimagesdownload()
-
-search_query = input("Enter a word to search: ")
-
-
-def download_images(query):
-    - keywords is the search query
-    - format is the the image file format
-    - limit is the number of images to be downloaded
-    - print_urls is to print the image file url
-    - size is the image size which can be specified
-        manually ('large, medium, icon')
-    - aspect_ratio denotes the height width ratio
-        of images to download.
-        ('tall, square, wide, panoramic')
-    
-
-    argument = {"keywords": query,
-                "format": "jpg",
-                "limit": 5,
-                "print_urls": True,
-                "size": "medium",
-                "aspect_radio": "panoramic"}
-    try:
-        response.download(argument)
-
-    except FileNotFoundError:
-        argument = {"keywords": query,
-                    "format": "jpg",
-                    "limit": 5,
-                    "print_urls": True,
-                    "size": "medium"}
-
-        try:
-            response.download(query)
-        except:
-            pass
-
-
-# for query in search_query:
-download_images(search_query)
-print()
-'''
-
-'''
-from giextractor import GoogleImageExtractor
-import time
-from selenium import webdriver
-
-driver = webdriver.Chrome('C://Program Files//chromedriver.exe')
-driver.get('http://www.google.com/')
-time.sleep(5) # Let the user actually see something!
-search_box = driver.find_element_by_name('q')
-search_box.send_keys('ChromeDriver')
-search_box.submit()
-time.sleep(5) # Let the user actually see something!
-driver.quit()
-
-imageExtractor = GoogleImageExtractor()
-imageExtractor.extract_images(imageQuery='apple fruit', imageCount=500)
-'''
-
-
 
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
@@ -207,7 +142,7 @@ def download_google_staticimages(user_input):
 
     if browser:
         browser.quit()
-    return count
+    return count, urls
 
 
 # Main block
