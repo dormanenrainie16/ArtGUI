@@ -155,7 +155,3 @@ def main(user_input):
     print(f'\n')
     print(f'Download completed. [Successful count = {count}].')
     print(f'Total time is {str(total_time)} seconds.')
-
-
-if __name__ == '__main__':
-    main()
