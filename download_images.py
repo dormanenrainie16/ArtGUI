@@ -101,7 +101,7 @@ def download_google_staticimages(user_input):
     options.add_argument('--no-sandbox')
     # options.add_argument('--headless')
 
-    dirs, maxcount, chromedriver,searchurl = search(user_input)
+    dirs, maxcount, chromedriver, searchurl = search(user_input)
 
     try:
         browser = webdriver.Chrome(chromedriver, options=options)
