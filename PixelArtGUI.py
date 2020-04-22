@@ -3,6 +3,8 @@ Created by: Betty Tannuzzo
 Version 1
 '''
 
+import download_images
+from download_images import *
 import tkinter as tk
 from tkinter import *
 from tkinter import font
@@ -77,8 +79,12 @@ class Example(Frame):
     def entry_res(self):
         user_input = ""
         user_input = self.entry.get()
-        #print(user_input)
+        print(user_input)
         self.entry.delete(0, END)
+
+        # Uses google chrome
+        download_images.main(user_input)
+
 
     # opens a new window to search for image(s)
     def search_image(self):

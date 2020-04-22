@@ -1,4 +1,11 @@
 '''
+Created by: Betty Tannuzzo
+Version 1
+
+Searches Google Chrome for images based on keyword and downloads image to directory
+'''
+
+'''
 from google_images_download import google_images_download
 response = google_images_download.googleimagesdownload()
 
@@ -6,7 +13,6 @@ search_query = input("Enter a word to search: ")
 
 
 def download_images(query):
-
     - keywords is the search query
     - format is the the image file format
     - limit is the number of images to be downloaded
@@ -16,7 +22,7 @@ def download_images(query):
     - aspect_ratio denotes the height width ratio
         of images to download.
         ('tall, square, wide, panoramic')
-
+    
 
     argument = {"keywords": query,
                 "format": "jpg",
@@ -63,6 +69,8 @@ imageExtractor = GoogleImageExtractor()
 imageExtractor.extract_images(imageQuery='apple fruit', imageCount=500)
 '''
 
+
+
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from bs4 import BeautifulSoup
@@ -79,14 +87,14 @@ from urllib3.exceptions import InsecureRequestWarning
 import datetime
 import time
 
-urllib3.disable_warnings(InsecureRequestWarning)
-
 
 def search(searchword1):
+    urllib3.disable_warnings(InsecureRequestWarning)
+
     # searchword1 = input("Enter a word to search: ")
     searchurl = 'https://www.google.com/search?q=' + searchword1 + '&source=lnms&tbm=isch'
 
-    dirs = 'pictures'
+    dirs = searchword1
     maxcount = 100
 
     chromedriver = 'C://Program Files//chromedriver.exe'
@@ -95,6 +103,7 @@ def search(searchword1):
         os.mkdir(dirs)
 
     return dirs, maxcount, chromedriver, searchurl
+
 
 def download_google_staticimages(user_input):
     options = webdriver.ChromeOptions()
@@ -183,23 +192,28 @@ def download_google_staticimages(user_input):
     if urls:
         for url in urls:
             try:
+                print(url)
                 res = requests.get(url, verify=False, stream=True)
                 rawdata = res.raw.read()
                 with open(os.path.join(dirs, 'img_' + str(count) + '.jpg'), 'wb') as f:
                     f.write(rawdata)
                     count += 1
+                    if count > 5:
+                        browser.quit()
+                        break
             except Exception as e:
                 print('Failed to write rawdata.')
                 print(e)
 
-    browser.close()
+    if browser:
+        browser.quit()
     return count
 
 
 # Main block
-def main():
+def main(user_input):
     t0 = time.time()
-    count = download_google_staticimages("rainbow")
+    count = download_google_staticimages(user_input)
     t1 = time.time()
 
     total_time = t1 - t0
