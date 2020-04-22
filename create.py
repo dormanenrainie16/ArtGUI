@@ -2,6 +2,7 @@
 # create.py contains functions to blend pictures appropriately.
 #
 #
+import os
 import random
 
 from pic import *
@@ -16,14 +17,31 @@ from pic import *
 def blender(first, master, count, _w=1024, _h=768):
     a = 1 / count
 
-    one = Image.fromarray(load_pic(first)).resize(_w, _h)
+    one = Image.fromarray(load_pic(first)).resize((_w, _h))
     two = master
 
     if master.size == (0, 0):
-        two = Image.fromarray(load_pic(first)).resize(_w, _h)
+        two = Image.fromarray(load_pic(first)).resize((_w, _h))
 
     three = Image.blend(two, one, a)
     return three
+
+
+# merger:
+# takes a directory of Images and uses Image.blend to combine.
+# Note: count is used for alpha values, as count increases, the prevalence of new images decreases
+# MUST BE UPDATED ONCE IMAGE[] IS COMPLETE
+def merger():
+    master = Image.Image()
+    counter = 1
+
+    for filename in os.listdir("/Users/jbujarski/Desktop/Everything/Pictures"):
+        if filename.endswith(".jpg") or filename.endswith(".jpeg"):
+            f_name = os.path.join('/Users/jbujarski/Desktop/Everything/Pictures/', filename)
+            print(f_name)
+            master = blender(name, master, counter)
+            counter += 1
+    view_pic(master)
 
 
 # rand_seed:
@@ -92,7 +110,7 @@ def negative(pic, _w=1024, _h=768, intensity=1):
 
 # ascii:
 # convert a picture to a rudimentary ASCII translation
-def ascii_pic(pic, _w, _h, intensity=1):
+def ascii_pic(pic, intensity=1):
     asc = Image.fromarray(load_pic(pic)).convert("L")
     asc = np.array(asc.resize((int(asc.width * 2 / intensity), int(asc.height / intensity))))
 
@@ -125,9 +143,13 @@ def switcher(choice):
 # asc_cond: ascii_condensed
 # produces a more condensed version of the Ascii picture
 # INCOMPLETE: MIRRORS ascii_pic AS OF NOW.
-def asc_cond(pic, _w, _h, intensity=1):
+def asc_cond(pic, intensity=1):
     asc = Image.fromarray(load_pic(pic)).convert("L")
-    asc = np.array(asc.resize((int(asc.width * 2 / intensity), int(asc.height / intensity))))
+    asc = asc.resize((int(asc.width * 2 / intensity), int(asc.height / intensity)))
+    while asc.width % 2: asc = asc.resize(((asc.width - 1), asc.height))
+    while asc.height % 2: asc = asc.resize((asc.width, (asc.height - 1)))
+    asc = np.array(asc)
+
     p_name = str.split(pic, ".")
     line = ""
     pic_txt = open(p_name[0] + ".txt", "w")
