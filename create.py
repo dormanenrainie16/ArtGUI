@@ -4,6 +4,8 @@
 #
 import random
 
+import PIL
+
 from pic import *
 
 
@@ -89,10 +91,35 @@ def negative(pic, _w=1024, _h=768, intensity=1):
             neg_pic[i, j] = pict[i, j]
     return Image.fromarray((neg_pic * 255).astype(np.uint8))
 
+
+# ascii:
+# convert a picture to a rudimentary ASCII translation
+def ascii_pic(pic, _w=1024, _h=768, intensity=1):
+    asc = np.array(Image.fromarray((load_pic(pic, int(_w * 2 / intensity), int(_h / intensity)))).convert("L"))
+    name = str.split(pic, ".")
+    line = ""
+    pic_txt = open(name[0] + ".txt", "w")
+    for i in range(asc.shape[0]):
+        for j in range(asc.shape[1]):
+            # asc[i, j] = switcher(int(asc[i, j] / 32))
+            line = line.__add__(chr(switcher(int(asc[i, j] / 32))))  # print(line)
+        pic_txt.write(line + "\n")
+        line = ""
+    return asc
+
+
+def switcher(choice):
+    switch = {
+        0: 32,    # space
+        1: 9624,  # "▘"
+        2: 9626,  # "▚"
+        3: 9625,  # "▙"
+        4: 9617,  # "░"
+        5: 9618,  # "▒"
+        6: 9619,  # "▓"
+        7: 9608   # "█"
+    }
+    return switch.get(choice)
+
 # Other fun ideas:
 # replace instances of a single color for another (i.e. every red becomes blue)
-# What if we could turn a picture into ASCII art?
-#   Use the "intensity" value we used earlier...
-#   Turn a photo to greyscale
-#   Shrink photo to more manageable size
-#   Depending on the darkness of the pixel, update with a certain ASCII value.
