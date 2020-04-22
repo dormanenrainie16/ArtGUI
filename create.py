@@ -92,15 +92,13 @@ def negative(pic, _w=1024, _h=768, intensity=1):
 
 # ascii:
 # convert a picture to a rudimentary ASCII translation
-def ascii_pic(pic, _w=1024, _h=768, intensity=1):
+def ascii_pic(pic, _w, _h, intensity=1):
     asc = Image.fromarray(load_pic(pic)).convert("L")
-    print(asc.width)
-    print(asc.height)
     asc = np.array(asc.resize((int(asc.width * 2 / intensity), int(asc.height / intensity))))
 
-    name = str.split(pic, ".")
+    p_name = str.split(pic, ".")
     line = ""
-    pic_txt = open(name[0] + ".txt", "w")
+    pic_txt = open(p_name[0] + ".txt", "w")
     for i in range(asc.shape[0]):
         for j in range(asc.shape[1]):
             line = line.__add__(chr(switcher(int(asc[i, j] / 32))))  # print(line)
@@ -109,6 +107,7 @@ def ascii_pic(pic, _w=1024, _h=768, intensity=1):
     return asc
 
 
+# switcher: required for unicode conversion
 def switcher(choice):
     switch = {
         0: 32,  # space
@@ -123,15 +122,15 @@ def switcher(choice):
     return switch.get(choice)
 
 
-def asc_cond(pic, _w=1024, _h=768, intensity=1):
+# asc_cond: ascii_condensed
+# produces a more condensed version of the Ascii picture
+# INCOMPLETE: MIRRORS ascii_pic AS OF NOW.
+def asc_cond(pic, _w, _h, intensity=1):
     asc = Image.fromarray(load_pic(pic)).convert("L")
-    print(asc.width)
-    print(asc.height)
     asc = np.array(asc.resize((int(asc.width * 2 / intensity), int(asc.height / intensity))))
-
-    name = str.split(pic, ".")
+    p_name = str.split(pic, ".")
     line = ""
-    pic_txt = open(name[0] + ".txt", "w")
+    pic_txt = open(p_name[0] + ".txt", "w")
     for i in range(asc.shape[0]):
         for j in range(asc.shape[1]):
             line = line.__add__(chr(switcher(int(asc[i, j] / 32))))  # print(line)
