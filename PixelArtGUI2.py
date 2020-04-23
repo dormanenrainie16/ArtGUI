@@ -142,13 +142,16 @@ class Example(Browse):
             label.image = photo
             label.pack(side = BOTTOM)
 
-            pixel_button = Button(frame, text = "Pixelize Image", font=("Times New Roman", 15))
-            pixel_button.pack(pady=10, side = LEFT)
+           negative_button = Button(frame, text = "Negative Image", font=("Times New Roman", 15),
+                                     command=negative(photo))
+            negative_button.pack(pady=10, side = LEFT)
 
-            hue_button = Button(frame, text="Change Image Hue", font=("Times New Roman", 15))
+            hue_button = Button(frame, text="Change Image Hue", font=("Times New Roman", 15),
+                                command=hue("verdant", photo))
             hue_button.pack(pady=10, side=RIGHT)
 
-            ascii_button = Button(frame, text="Convert Image to Ascii", font=("Times New Roman", 15))
+            ascii_button = Button(frame, text="Convert Image to Ascii", font=("Times New Roman", 15),
+                                  command=ascii_pic(photo))
             ascii_button.pack(pady=10, side=RIGHT)
 
 
