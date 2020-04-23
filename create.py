@@ -14,17 +14,19 @@ from pic import *
 #   count = tracker used for the weight of the photo, keep balance
 #   _w & _h = width/height, allow user input.
 # FUTURE: make user options for width & height
-def blender(first, master, count, _w=1024, _h=768):
+def blender(added, master, count, _w=1024, _h=768):
     a = 1 / count
-
-    one = Image.fromarray(load_pic(first)).resize((_w, _h))
-    two = master
+    saved = master
 
     if master.size == (0, 0):
-        two = Image.fromarray(load_pic(first)).resize((_w, _h))
+        saved = added
+        
+    added = added.convert(mode='RGBA')
+    saved = saved.convert(mode='RGBA')
+    added = added.resize((_w, _h))
+    saved = saved.resize((_w, _h))
 
-    three = Image.blend(two, one, a)
-    return three
+    return Image.blend(saved, added, a)
 
 
 # merger:
