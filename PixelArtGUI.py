@@ -82,12 +82,12 @@ class Example(Browse):
             win1 = tk.Toplevel()
             win1.geometry("600x600")
             win1["bg"] = "black"
-            lb1 = Label(win1, text="Image Search By Word", fg='red', font=("Ink Free", 26))
+            lb1 = Label(win1, text="Image Search By Word", fg='#00ff00', bg='black', font=("Courier", 26))
             lb1.pack()
 
             ''' WORD SEARCH - NORMAL'''
-            lb2 = Label(win1, text="Enter a word below to search for an image via Google", fg='red',
-                        font=("Ink Free", 14))
+            lb2 = Label(win1, text="Enter a word below to search for an image via Google", fg='#00ff00', bg='black',
+                        font=("Courier", 14))
             lb2.pack(side=TOP)
             frame = Frame(win1)
             frame.pack(side=TOP)
@@ -98,8 +98,8 @@ class Example(Browse):
             image_button.grid(row=0, column=20, columnspan=3, padx=1, pady=1)
 
             '''WORD SEARCH - COMPOSITE/BLENDED'''
-            lb3 = Label(win1, text="Enter a word below to search for a composite image of many results", fg='red',
-                        font=("Ink Free", 14))
+            lb3 = Label(win1, text="Enter a word below to search for a composite image of many results", fg='#00ff00',
+                        bg='black', font=("Courier", 14))
             lb3.pack(side=TOP)
             frame1 = Frame(win1)
             frame1.pack(side=TOP)
@@ -110,8 +110,8 @@ class Example(Browse):
             blended_button.grid(row=4, column=20, columnspan=3, padx=1, pady=1)
 
             '''RANDOM IMAGE'''
-            lb4 = Label(win1, text="Enter a string to seed a random picture, or leave blank for random seed", fg='red',
-                        font=("Ink Free", 14))
+            lb4 = Label(win1, text="Enter a string to seed a random picture, or leave blank for random seed",
+                        fg='#00ff00', bg='black', font=("Courier", 14))
             lb4.pack(side=TOP)
             frame2 = Frame(win1)
             frame2.pack(side=TOP)
@@ -122,8 +122,8 @@ class Example(Browse):
                                         command=self.random_entry_res)
             random_seed_button.pack(side=RIGHT, fill=X)
 
-            lb5 = Label(win1, text="Enter an \"intensity\" value, or pixel density (larger = less dense)", fg='red',
-                        font=("Ink Free", 14))
+            lb5 = Label(win1, text="Enter an \"intensity\" value, or pixel density (larger = less dense)", fg='#00ff00',
+                        bg='black', font=("Courier", 14))
             lb5.pack(side=TOP)
             frame3 = Frame(win1)
             frame3.pack(side=TOP)
