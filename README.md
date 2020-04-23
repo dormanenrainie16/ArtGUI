@@ -9,20 +9,20 @@ NOTE: To properly implement the webscraper, chromedriver MUST be included in the
 Further, ensure pixels.jpg is in the current working directory.
 
 Libraries required:
-tkinter
-random
-sys
-io.BytesIO
-requests
-urllib3
-PIL.Image
-Pil.ImageTK
-bs4.BeautifulSoup
-selenium.webdriver
-urllib3.exceptions.InsecureRequestWarning
-matplotlib.pyplot (file for testing purposes)
-numpy
-os
+* tkinter
+* random
+* sys
+* io.BytesIO
+* requests
+* urllib3
+* PIL.Image
+* Pil.ImageTK
+* bs4.BeautifulSoup
+* selenium.webdriver
+* urllib3.exceptions.InsecureRequestWarning
+* matplotlib.pyplot (file for testing purposes)
+* numpy
+* os
 
 Other resources required:
 chromedriver (version 81 used)
