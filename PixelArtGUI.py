@@ -15,6 +15,7 @@ from PIL import ImageTk, Image
 from pandas import DataFrame
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
+import numpy as np
 
 from browse import *
 
@@ -45,7 +46,10 @@ class Example(Browse):
 
         self.image = Image.open("pixels.jpg")
         self.img_copy = self.image.copy()
-        self.entry = Entry()
+        self.blended_entry = Entry()
+        self.random_entry = Entry()
+        self.image_entry = Entry()
+        self.intensity_entry = Entry()
         self.background_image = ImageTk.PhotoImage(self.image)
 
         self.background = Label(self, image=self.background_image)
@@ -85,24 +89,37 @@ class Example(Browse):
             lb.pack()
             frame = Frame(win1)
             frame.pack(side=TOP)
+            self.image_entry = Entry(frame, bd=5, width=20)
+            self.image_entry.pack(side=LEFT, fill=X)
+            image_button = Button(frame, text="Enter word for Regular Image", font=("Times New Roman", 10), command=self.image_entry_res)
+            image_button.pack(side=RIGHT, fill=X)
+            frame1 = Frame(win1)
+            frame1.pack(side=TOP)
             frame2 = Frame(win1)
             frame2.pack(side=TOP)
-            self.entry = Entry(frame, bd=5)
-            self.entry.pack(side=LEFT, fill=X)
-            blended_button = Button(frame,  text="Enter word for a random image", font=("Times New Roman", 10))
+            frame3 = Frame(win1)
+            frame3.pack(side=TOP)
+            self.blended_entry = Entry(frame1, bd=5, width=20)
+            self.blended_entry.pack(side=LEFT, fill=X)
+            blended_button = Button(frame1, text="Enter word for Blended Image", font = ("Times New Roman", 10), command = self.blended_entry_res)
             blended_button.pack(side=RIGHT, fill=X)
-            self.entry = Entry(frame2, bd=5)
-            self.entry.pack(side=LEFT, fill=X)
-            random_seed_button = Button(frame2, text = "Enter word for Blended Image", font = ("Times New Roman", 10), command = self.entry_res)
+            self.random_entry = Entry(frame2, bd=5)
+            self.random_entry.pack(side=LEFT, fill=X)
+            # "Enter word for a random image", font=("Times New Roman", 10)
+            random_seed_button = Button(frame2, text = "Enter word for a random image", font=("Times New Roman", 10), command=self.random_entry_res)
             random_seed_button.pack(side=RIGHT, fill=X)
+            self.intensity_entry = Entry(frame3, bd=2, width=10)
+            self.intensity_entry.pack(side=LEFT, fill=X)
+            intenstiy_label = Label(frame3, text="Intensity Level (random image)", font=("Times New Roman", 10))
+            intenstiy_label.pack(side=RIGHT, fill=X)
 
     # Stores the results of the entry box (user input) and clears the entry box after
     # Probably should do the algorithm in this function as well
-    def entry_res(self):
+    def blended_entry_res(self):
         user_input = ""
-        user_input = self.entry.get()
+        user_input = self.blended_entry.get()
         print(user_input)
-        self.entry.delete(0, END)
+        self.blended_entry.delete(0, END)
 
         master = Image.Image()
         counter = 1
@@ -112,8 +129,43 @@ class Example(Browse):
         for i in range(1, len(array)):
             master = create.blender(array[i], master, counter)
             counter += 1
-        pic.view_pic(master)
+        res_fig = pic.view_pic(master)
+        res_fig.show()
+        # res.show()
 
+    def image_entry_res(self):
+        user_input = ""
+        user_input = self.image_entry.get()
+        print(user_input)
+        self.image_entry.delete(0, END)
+
+        master = Image.Image()
+        counter = 1
+        array = []
+        # Uses google chrome
+        array = download_google_staticimages(user_input)
+        for i in range(1, 2):
+            master = create.blender(array[i], master, counter)
+            counter += 1
+        res_fig = pic.view_pic(master)
+        res_fig.show()
+        # res.show()
+
+    def random_entry_res(self):
+        user_input = ""
+        user_input = self.random_entry.get()
+        print(user_input)
+        self.random_entry.delete(0, END)
+
+        if not self.intensity_entry:
+            master = create.rand_seed(user_input)
+            res_fig = pic.view_pic(master)
+            res_fig.show()
+        else:
+            master = create.rand_seed(user_input, intensity=int(self.intensity_entry.get()))
+            res_fig = pic.view_pic(master)
+            self.intensity_entry.delete(0,END)
+            res_fig.show()
 
     # opens a new window to search for image(s)
     # by Rainie Dormanen
