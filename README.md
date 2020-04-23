@@ -6,7 +6,7 @@ Team Members:
 * Rainie Dormanen
 * J Bujarski
 
-NOTE: To properly implement the webscraper, chromedriver MUST be included in the PATH used in download_images.py.
+NOTE: To properly implement the webscraper, chromedriver MUST be included in the current working directory used in download_images.py.
 Further, ensure pixels.jpg is in the current working directory.
 
 Libraries required:
