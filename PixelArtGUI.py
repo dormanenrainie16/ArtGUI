@@ -21,6 +21,7 @@ web.configure(background='Black')
 web.geometry("600x600")
 
 # title-label
+web.title("Pixel Art Generator")
 w = Label(web, text="Welcome to Pixel Art", font=("Ink Free", 36))
 w.pack()
 
