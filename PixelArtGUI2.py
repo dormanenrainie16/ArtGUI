@@ -196,14 +196,56 @@ class Example(Browse):
             label.image = photo
             label.pack(side=BOTTOM)
 
-            negative_button = Button(frame, text="Negative Image", font=("Times New Roman", 15))
-            negative_button.pack(pady=10, side=LEFT)
+            self.negative_button = Button(frame, text="Negative Image", font=("Times New Roman", 15), command = self.add_negative(photo))
+            self.negative_button.pack(pady=10, side=LEFT)
 
-            hue_button = Button(frame, text="Change Image Hue", font=("Times New Roman", 15))
-            hue_button.pack(pady=10, side=RIGHT)
+            self.hue_button = Button(frame, text="Change Image Hue", font=("Times New Roman", 15), command = self.add_hue(photo))
+            self.hue_button.pack(pady=10, side=RIGHT)
 
-            ascii_button = Button(frame, text="Convert Image to Ascii", font=("Times New Roman", 15))
-            ascii_button.pack(pady=10, side=RIGHT)
+            self.ascii_button = Button(frame, text="Convert Image to Ascii", font=("Times New Roman", 15), command = self.add_ascii(photo))
+            self.ascii_button.pack(pady=10, side=RIGHT)
+
+
+    def add_negative(self, img):
+        try:
+            if win3.state() == "normal": win3.focus()
+        except NameError as e:
+            print(e)
+            win3 = tk.Toplevel()
+            win3.geometry("600x600")
+            win3["bg"] = "black"
+            lb = Label(win3, text="Here is your negative image!", fg='red', font=("Ink Free", 25))
+            lb.pack()
+            frame = Frame(win3)
+            frame.pack(side=TOP)
+
+    def add_hue(self, img):
+        try:
+            if win4.state() == "normal": win4.focus()
+        except NameError as e:
+            print(e)
+            win4 = tk.Toplevel()
+            win4.geometry("600x600")
+            win4["bg"] = "black"
+            lb = Label(win4, text="Input Hue", fg='red', font=("Ink Free", 25))
+            lb.pack()
+            frame = Frame(win4)
+            frame.pack(side=TOP)
+
+    def add_ascii(self, img):
+        try:
+            if win5.state() == "normal": win5.focus()
+        except NameError as e:
+            print(e)
+            win5 = tk.Toplevel()
+            win5.geometry("600x600")
+            win5["bg"] = "black"
+            lb = Label(win5, text="Here is your ascii image!", fg='red', font=("Ink Free", 25))
+            lb.pack()
+            frame = Frame(win5)
+            frame.pack(side=TOP)
+
+
 
 
 
