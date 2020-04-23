@@ -32,7 +32,8 @@ Extra features implemented:
 * Originally, a feature was intended to create a text string from an input image, however this was impractical to implement.
 Rather, two functions were created to develop Ascii Art from the image, the more rudimentary using 8 values, the more
 condensed using 36 values.
-
+    *Note that the Ascii options are mainly for MAC users only  
+    
 Division of Labor:
 
 * J:
@@ -43,12 +44,21 @@ Division of Labor:
     * Frame/picture formatting in search_image, image updating / button functionality
   
   
-Betty:
+* Betty:
+  * All functions for the web scraper in download_images.py
+    * I followed and try to extract google_images_download.py to see how they got their images from Google since this library didn't work unless it ran for a couple of hours. 
+      --> https://github.com/hardikvasa/google-images-download/blob/master/google_images_download/google_images_download.py
+    * I also referenced some StackOverflow discussions:
+       --> https://stackoverflow.com/questions/20716842/python-download-images-from-google-image-search
+  * GUI implementation and visualization
+    * Built the skeleton of all 3 windows in the GUI 
+    * I created the main window in the GUI using tkinter's widgets and functionalities
+    * I also created and provided functionality for the tkinter window when searching for a word
 
 Rainie:
 
 
-
+-----------------------------------------------------------------------------------------------------------------
 
 Milestone 2:
 Project function: a GUI that procedurally generates images from text, thus every string of text would generate a unique picture. 
@@ -80,7 +90,7 @@ Betty Tannuzzo:
       database
   * Libraries to include: all the ones mentioned above
     * plus 
-      * os, xgoogle, re, urlparse, GeoIP, sys
+      * os, xgoogle, re, urllib, GeoIP, sys
       
  Rainie Dormanen:
   * We might also need to actually process the images to be used to develop the new images
