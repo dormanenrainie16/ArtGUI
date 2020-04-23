@@ -3,7 +3,9 @@ Created by: Betty Tannuzzo
 Version 1
 '''
 
-import download_images
+import create
+import pic
+
 from download_images import *
 import tkinter as tk
 from tkinter import *
@@ -27,7 +29,7 @@ class Example(Frame):
     def __init__(self, master, *args):
         Frame.__init__(self, master, *args)
 
-        self.image = Image.open("pixels.jpg")
+        self.image = Image.open("/Users/jbujarski/PycharmProjects/proj/pixels.jpg")
         self.img_copy = self.image.copy()
         self.entry = Entry()
         self.background_image = ImageTk.PhotoImage(self.image)
@@ -82,9 +84,15 @@ class Example(Frame):
         print(user_input)
         self.entry.delete(0, END)
 
+        master = Image.Image()
+        counter = 1
+        array = []
         # Uses google chrome
-        download_images.main(user_input)
-
+        array = download_google_staticimages(user_input)
+        for i in range(len(array)):
+            master = create.blender(array[i], master, counter)
+            counter += 1
+        pic.view_pic(master)
 
     # opens a new window to search for image(s)
     def search_image(self):
