@@ -32,7 +32,6 @@ Extra features implemented:
 * Originally, a feature was intended to create a text string from an input image, however this was impractical to implement.
 Rather, two functions were created to develop Ascii Art from the image, the more rudimentary using 8 values, the more
 condensed using 36 values.
-    *Note that the Ascii options are mainly for MAC users only  
     
 Division of Labor:
 
@@ -56,11 +55,11 @@ Division of Labor:
     * I also created and provided functionality for the tkinter window when searching for a word
 
 * Rainie:
-   *All functions in Browse.py and some implmentations in PixelArtGUI.py
+   * All functions in Browse.py and some implmentations in PixelArtGUI.py
       * Implemented browse functionality by building Browse class to get files from users file libraries 
       * referenced Youtube and Codeloop https://www.youtube.com/watch?v=ytPw-_EE4KE
       * https://codeloop.org/how-to-browse-a-file-in-python-tkinter/  
-   *Partial GUI implementation and visualization
+   * Partial GUI implementation and visualization
       * Built buttons and widgets using tkinter, displayed images
       * Helped create and implement functions when uploading and using create functions to edit images
       
