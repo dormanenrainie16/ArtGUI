@@ -6,6 +6,8 @@
 import matplotlib.pyplot as plt
 import numpy as np
 from PIL import Image
+from matplotlib.figure import Figure
+import matplotlib
 
 load_pic = lambda name: np.array(Image.open(name))
 
@@ -13,4 +15,7 @@ load_pic = lambda name: np.array(Image.open(name))
 def view_pic(name):
     plt.figure()
     plt.imshow(name)
-    plt.show()
+    plt.axis('off')
+    plt.tight_layout()
+    #plt.show()
+    return plt
