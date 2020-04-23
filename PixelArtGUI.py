@@ -30,7 +30,7 @@ class Example(Frame):
     def __init__(self, master, *args):
         Frame.__init__(self, master, *args)
 
-        self.image = Image.open("/Users/jbujarski/PycharmProjects/proj/pixels.jpg")
+        self.image = Image.open("pixels.jpg")
         self.img_copy = self.image.copy()
         self.entry = Entry()
         self.background_image = ImageTk.PhotoImage(self.image)
@@ -68,14 +68,20 @@ class Example(Frame):
             win1 = tk.Toplevel()
             win1.geometry("600x600")
             win1["bg"] = "black"
-            lb = Label(win1, text="Enter a word to get pixel image", fg='red', font=("Ink Free", 26))
+            lb = Label(win1, text="Enter a word to get an image", fg='red', font=("Ink Free", 26))
             lb.pack()
             frame = Frame(win1)
             frame.pack(side=TOP)
+            frame2 = Frame(win1)
+            frame2.pack(side=TOP)
             self.entry = Entry(frame, bd=5)
-            self.entry.pack(side=TOP, fill=X)
-            Enter_button = Button(frame, text="Enter", font=("Times New Roman", 10), command=self.entry_res)
-            Enter_button.pack(side=BOTTOM, fill=X)
+            self.entry.pack(side=LEFT, fill=X)
+            blended_button = Button(frame,  text="Enter word for a random image", font=("Times New Roman", 10))
+            blended_button.pack(side=RIGHT, fill=X)
+            self.entry = Entry(frame2, bd=5)
+            self.entry.pack(side=LEFT, fill=X)
+            random_seed_button = Button(frame2, text = "Enter word for Blended Image", font = ("Times New Roman", 10), command = self.entry_res)
+            random_seed_button.pack(side=RIGHT, fill=X)
 
     # Stores the results of the entry box (user input) and clears the entry box after
     # Probably should do the algorithm in this function as well
