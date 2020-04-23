@@ -97,17 +97,19 @@ def hue(var, pic, _w=1024, _h=768, intensity=1):
         for j in range(0, int(_w / intensity)):
             hue_pic[i, j] = color
     hue_pic = Image.fromarray((hue_pic * 255).astype(np.uint8))
-    return Image.blend(pic, hue_pic, 0.5)
+    resized = Image.fromarray(load_pic(pic))
+    resized = resized.resize((int(_w / intensity), int(_h / intensity)))
+    return Image.blend(resized, hue_pic, 0.5)
 
 
 # negative:
 # convert a picture to the photo-negative version
 #   ALL VARIABLES REDUNDANT TO hue; SAME FUNCTIONALITY UNDER DIFFERENT PARAM.
-def negative(pic, _w=1024, _h=768, intensity=1):
-    neg_pic = np.ndarray((int(_h / intensity), int(_w / intensity), 3))
+def negative(pic):
     pict = load_pic(pic)
-    for i in range(0, int(_h / intensity)):
-        for j in range(0, int(_w / intensity)):
+    neg_pic = np.ndarray((pict.shape[0], pict.shape[1], 3))
+    for i in range(0, pict.shape[0]):
+        for j in range(0, pict.shape[1]):
             neg_pic[i, j] = pict[i, j]
     return Image.fromarray((neg_pic * 255).astype(np.uint8))
 
