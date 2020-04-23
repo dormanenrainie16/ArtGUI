@@ -64,7 +64,11 @@ Division of Labor:
       * Helped create and implement functions when uploading and using create functions to edit images
       
    
-
+Major Obstacles:
+* The webscraper and inclusion of the webdriver proved to be remarkably difficult. Hours were put in to trying to find
+any explanation on how to create a web scraper, and many of the online libraries available are practically useless
+since Google changed the method they return image searches. However, the version we implement is functional (courtesy
+of Betty, I (J) was pulling my hair out trying to get my version to work).
 
 -----------------------------------------------------------------------------------------------------------------
 
