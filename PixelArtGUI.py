@@ -28,7 +28,7 @@ web.title("Pixel Art Generator")
 w = Label(web, text="Welcome to the Pixel Art GUI", bg='black', fg='#00ff00', font=("Courier", 32))
 w.pack()
 
-
+#Creates Browse class to browse user's files for image upload
 class Browse(Frame):
     """ Creates a frame that contains a button when clicked lets the user to select
     a file and put its filepath into an entry.
@@ -245,18 +245,22 @@ class Example(Browse):
     # opens a new window to search for image(s)
     # by Rainie Dormanen
     def search_image(self):
-        win2 = tk.Toplevel()
+        win2 = tk.Toplevel() # create new window
         win2["bg"] = "black"
         lb = Label(win2, text="Edit Image", fg='#00ff00', bg='black', font=("Courier", 25))
         lb.pack()
         frame = Frame(win2, bg='black')
         frame.pack(side=TOP)
 
+        
+        #opens user file directory and looks for images
         filename = fd.askopenfilename(initialdir=r"C:\Users", title="Browse Images",
                                       filetypes=(('jpg files', '*.jpg',),
                                                  ('png files', '*.png'),
                                                  ('jpeg files', '*.jpeg')))
 
+        
+        # changes fphoto dimensions to fit window
         fphoto = Image.open(filename)
         _w = min(1200, fphoto.width)
         _h = min(800, fphoto.height)
