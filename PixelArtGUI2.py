@@ -47,7 +47,7 @@ class Example(Browse):
         Frame.__init__(self, master, *args)
         Browse.__init__(self, master, initialdir='', filetypes=())
 
-        self.image = Image.open("/Users/rainiedormanen/Desktop/ArtGUI-master/pixels.jpg")
+        self.image = Image.open("/Users/rainiedormanen/Downloads/ArtGUI-master 2/pixels.jpg")
         self.img_copy = self.image.copy()
         self.entry = Entry()
         self.background_image = ImageTk.PhotoImage(self.image)
@@ -122,28 +122,52 @@ class Example(Browse):
             win2 = tk.Toplevel()
             win2.geometry("600x600")
             win2["bg"] = "black"
-            lb = Label(win2, text="Enter an image or images to get word", fg='red', font=("Ink Free", 25))
+            lb = Label(win2, text="Select an image or images to get Word", fg='red', font=("Ink Free", 25))
             lb.pack()
             frame = Frame(win2)
             frame.pack(side=TOP)
 
-            self.entry = Entry(frame, bd=5)
-            self.entry.pack(side=TOP, fill=X)
 
-            browse_button = Button(frame, text="Browse...", font=("Times New Roman", 10), command=self.browse)
-            browse_button.pack(side=BOTTOM, fill=X, expand = True)
+            filename = fd.askopenfilename(initialdir=r"C:\Users", title ="Browse Images", filetypes=(('jpg files', '*.jpg',),
+                                             ('png files', '*.png'),
+                                             ('jpeg files', '*.jpeg')))
 
-            file_browser = Browse(web, initialdir=r"C:\Users",
-                                  filetypes=(('jpg files', '*.jpg',),
-                                             ("All files", "*.*")))
-            file_browser.pack(fill='x', expand=True)
+            my_label = Label(win2, text=filename).pack()
 
-    def browse(self):
+
+            photo = Image.open(filename)
+            photo = photo.resize((400, 500), Image.ANTIALIAS)
+            photo = ImageTk.PhotoImage(photo)
+            label = Label(win2, image=photo)
+            label.image = photo
+            label.pack()
+
+            label.bind('<Configure>', self._resize_image)
+
+
+
+
+
+
+
+            '''browse_button = Button(frame, text="Browse Images", font=("Times New Roman", 15), command=self.browse)
+            browse_button.pack(side=TOP, fill=X, expand = True)'''
+
+            #file_browser = Browse(web, initialdir=r"C:\Users",
+                                  #filetypes=(('jpg files', '*.jpg',),('png files', '*.png'),
+                                  #('jpeg files', '*.jpeg')))
+            #file_browser.pack(fill='x', expand=True)
+
+
+
+    '''def browse(self):
         """ Browses a .jpg or .jpeg file or all files and then puts it on the entry.
         """
-
         self.filepath.set(fd.askopenfilename(initialdir=self._initaldir,
-                                                filetypes=self._filetypes))
+                                                #filetypes=self._filetypes))
+        my_label = Label(win2, text=self.filepath)
+        myimage = ImageTk.PhotoImage(Image.open(filepath))
+        my_image_label =Label(win2,image=my_image).pack()'''
 
 
 
