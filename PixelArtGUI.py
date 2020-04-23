@@ -28,6 +28,7 @@ web.title("Pixel Art Generator")
 w = Label(web, text="Welcome to Pixel Art", font=("Ink Free", 36))
 w.pack()
 
+
 class Browse(Frame):
     """ Creates a frame that contains a button when clicked lets the user to select
     a file and put its filepath into an entry.
@@ -39,12 +40,13 @@ class Browse(Frame):
         self._initaldir = initialdir
         self._filetypes = filetypes
 
+
 class Example(Browse):
     def __init__(self, master, *args):
         Frame.__init__(self, master, *args)
         Browse.__init__(self, master, initialdir='', filetypes=())
 
-        self.image = Image.open("pixels.jpg")
+        self.image = Image.open("/Users/jbujarski/PycharmProjects/proj/pixels.jpg")
         self.img_copy = self.image.copy()
         self.blended_entry = Entry()
         self.random_entry = Entry()
@@ -171,53 +173,112 @@ class Example(Browse):
             counter += 1
         res_fig = pic.view_pic(master)
         res_fig.show()
-        # res.show()
 
     def random_entry_res(self):
-        user_input = ""
         user_input = self.random_entry.get()
         print(user_input)
         self.random_entry.delete(0, END)
 
-        if not self.intensity_entry:
+        if not self.intensity_entry.get():
             master = create.rand_seed(user_input)
             res_fig = pic.view_pic(master)
             res_fig.show()
         else:
             master = create.rand_seed(user_input, intensity=int(self.intensity_entry.get()))
             res_fig = pic.view_pic(master)
-            self.intensity_entry.delete(0,END)
+            self.intensity_entry.delete(0, END)
             res_fig.show()
 
-    # opens a new window to search for image(s)
-    # by Rainie Dormanen
+        # opens a new window to search for image(s)
+        # by Rainie Dormanen
     def search_image(self):
         try:
-            if win2.state() == "normal": win2.focus()
-        except NameError as e:
-            print(e)
             win2 = tk.Toplevel()
             win2.geometry("600x600")
             win2["bg"] = "black"
-            lb = Label(win2, text="Enter an image or images to get word", fg='red', font=("Ink Free", 25))
+            lb = Label(win2, text="Upload Image to Edit", fg='red', font=("Ink Free", 25))
             lb.pack()
             frame = Frame(win2)
             frame.pack(side=TOP)
-            self.entry = Entry(frame, bd=5)
-            self.entry.pack(side=TOP, fill=X)
-            browse_button = Button(frame, text="Browse...", font=("Times New Roman", 10), command=self.browse)
-            browse_button.pack(side=BOTTOM, fill=X, expand = True)
-            file_browser = Browse(web, initialdir=r"C:\Users",
-                                  filetypes=(('jpg files', '*.jpg',),
-                                             ("All files", "*.*")))
-            file_browser.pack(fill='x', expand=True)
 
-    def browse(self):
-        """ Browses a .jpg or .jpeg file or all files and then puts it on the entry.
-        """
-        self.filepath.set(fd.askopenfilename(initialdir=self._initaldir,
-                                                filetypes=self._filetypes))
+            filename = fd.askopenfilename(initialdir=r"C:\Users", title="Browse Images",
+                                          filetypes=(('jpg files', '*.jpg',),
+                                                     ('png files', '*.png'),
+                                                     ('jpeg files', '*.jpeg')))
 
+            photo = Image.open(filename)
+            photo = photo.resize((400, 500), Image.ANTIALIAS)
+            photo = ImageTk.PhotoImage(photo)  # saves copy of image
+            label = Label(win2, image=photo)
+            label.image = photo
+            label.pack(side=BOTTOM)
+
+            negative_button = Button(frame, text="Negative Image", font=("Times New Roman", 15),
+                                          command=lambda: self.add_negative(photo))
+            negative_button.pack(pady=10, side=LEFT)
+
+            hue_button = Button(frame, text="Change Image Hue", font=("Times New Roman", 15),
+                                     command=lambda: self.add_hue(photo))
+            hue_button.pack(pady=10, side=RIGHT)
+
+            ascii_button = Button(frame, text="Convert Image to Ascii", font=("Times New Roman", 15),
+                                       command=lambda: self.add_ascii(photo))
+            ascii_button.pack(pady=10, side=RIGHT)
+        except NameError as e:
+            if win2.state() == "normal": win2.focus()
+
+    def add_negative(self, img):
+        try:
+            win3 = tk.Toplevel()
+            win3.geometry("600x600")
+            win3["bg"] = "black"
+            lb = Label(win3, text="Here is your negative image!", fg='red', font=("Ink Free", 25))
+            lb.pack()
+            frame = Frame(win3)
+            frame.pack(side=TOP)
+        except NameError as e:
+            if win3.state() == "normal": win3.focus()
+
+    def add_hue(self, img):
+        try:
+            win4 = tk.Toplevel()
+            win4.geometry("600x600")
+            win4["bg"] = "black"
+            lb = Label(win4, text="Select Hue", fg='red', font=("Ink Free", 25))
+            lb.pack()
+            frame = Frame(win4)
+            frame.pack(side=TOP)
+
+            # add buttons so user can enter hue
+            warm_button = Button(frame, text="Add Warm Hue", font=("Times New Roman", 15), )
+            warm_button.pack(pady=10, side=TOP)
+
+            verdant_button = Button(frame, text="Add Verdant Hue", font=("Times New Roman", 15), )
+            verdant_button.pack(pady=10, side=BOTTOM)
+
+            cool_button = Button(frame, text="Add Cool Hue", font=("Times New Roman", 15), )
+            cool_button.pack(pady=10, side=BOTTOM)
+        except NameError as e:
+            if win4.state() == "normal": win4.focus()
+
+
+def add_ascii(self, img):
+        try:
+            win5 = tk.Toplevel()
+            win5.geometry("600x600")
+            win5["bg"] = "black"
+            lb = Label(win5, text="Here is your ascii image!", fg='red', font=("Ink Free", 25))
+            lb.pack()
+            frame = Frame(win5)
+            frame.pack(side=TOP)
+
+            self.intensity_entry = Entry(frame, bd=5, width=20)
+            self.intensity_entry.grid(row=4, column=1, columnspan=3, padx=1, pady=1)
+            intensity_button = Button(frame, text="Enter Intensity for Added Fun! (Ex: 100)",
+                                      font=("Times New Roman", 10))
+            intensity_button.grid(row=4, column=20, columnspan=3, padx=1, pady=1)
+        except NameError as e:
+            if win5.state() == "normal": win5.focus()
 
 # background image
 e = Example(web)
@@ -225,4 +286,3 @@ e.pack()
 
 # show Window
 web.mainloop()
-
