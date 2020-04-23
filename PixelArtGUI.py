@@ -46,7 +46,7 @@ class Example(Browse):
         Frame.__init__(self, master, *args)
         Browse.__init__(self, master, initialdir='', filetypes=())
 
-        self.image = Image.open("pixels.jpg")
+        self.image = Image.open("/Users/jbujarski/PycharmProjects/proj/pixels.jpg")
         self.img_copy = self.image.copy()
         self.blended_entry = Entry()
         self.random_entry = Entry()
@@ -147,8 +147,8 @@ class Example(Browse):
         # frame.pack(side=BOTTOM)
         return frame
 
-    # Stores the results of the entry box (user input) and clears the entry box after
-    # Probably should do the algorithm in this function as well
+        # Stores the results of the entry box (user input) and clears the entry box after
+        # Probably should do the algorithm in this function as well
     def blended_entry_res(self, frame, window, label):
         user_input = "No results"
         user_input = self.blended_entry.get()
@@ -158,23 +158,30 @@ class Example(Browse):
         master = Image.Image()
         counter = 1
         array = []
+
+        panel = label
+        panel.pack()
+
         # Uses google chrome
         array = download_google_staticimages(user_input)
-        for i in range(1, len(array)):
-            master = create.blender(array[i], master, counter)
-            counter += 1
-
-        # Get the image so it is ready to be displayed
-        master = master.resize((250, 250), Image.ANTIALIAS)
+        master = create.blender(array[1], master, counter)
+        master = master.resize((300, 300), Image.ANTIALIAS)
         img = ImageTk.PhotoImage(master)
 
+        for i in range(2, len(array)):
+            master = create.blender(array[i], master, counter)
+            counter += 1
+            master = master.resize((300, 300), Image.ANTIALIAS)
+            img = ImageTk.PhotoImage(master)
+            panel.config(image=img)
+            panel.photo_ref = img
+            window.update()
+        # Get the image so it is ready to be displayed
+
         # Display image in label
-        panel = label
+
         panel.image = img
-        panel.config(image=img)
-        panel.pack()
-        panel.photo_ref = img
-        window.update()
+
 
     def image_entry_res(self, frame, window, label):
         user_input = ""
@@ -235,60 +242,53 @@ class Example(Browse):
             panel.photo_ref = img
             window.update()
 
+
     # opens a new window to search for image(s)
     # by Rainie Dormanen
     def search_image(self):
-        try:
-            win2 = tk.Toplevel()
-            win2.geometry("600x600")
-            win2["bg"] = "black"
-            lb = Label(win2, text="Upload Image to Edit", fg='red', font=("Ink Free", 25))
-            lb.pack()
-            frame = Frame(win2)
-            frame.pack(side=TOP)
+        win2 = tk.Toplevel()
+        win2["bg"] = "black"
+        lb = Label(win2, text="Upload Image to Edit", fg='red', font=("Ink Free", 25))
+        lb.pack()
+        frame = Frame(win2)
+        frame.pack(side=TOP)
 
-            filename = fd.askopenfilename(initialdir=r"C:\Users", title="Browse Images",
-                                          filetypes=(('jpg files', '*.jpg',),
-                                                     ('png files', '*.png'),
-                                                     ('jpeg files', '*.jpeg')))
+        filename = fd.askopenfilename(initialdir=r"C:\Users", title="Browse Images",
+                                      filetypes=(('jpg files', '*.jpg',),
+                                                 ('png files', '*.png'),
+                                                 ('jpeg files', '*.jpeg')))
 
-            photo = Image.open(filename)
-            photo = photo.resize((400, 500), Image.ANTIALIAS)
-            photo = ImageTk.PhotoImage(photo)  # saves copy of image
-            label = Label(win2, image=photo)
-            label.image = photo
-            label.pack(side=BOTTOM)
+        fphoto = Image.open(filename)
+        geo = str(fphoto.width) + "x" + str(fphoto.height + 100)
+        win2.geometry(geo)
 
-            negative_button = Button(frame, text="Negative Image", font=("Times New Roman", 15),
-                                     command=lambda: self.add_negative(photo))
-            negative_button.pack(pady=10, side=LEFT)
+        tkphoto = ImageTk.PhotoImage(fphoto)  # saves copy of image
+        label = Label(win2, image=tkphoto)
+        label.image = tkphoto
+        label.pack(side=BOTTOM)
 
-            hue_button = Button(frame, text="Change Image Hue", font=("Times New Roman", 15),
-                                command=lambda: self.add_hue(photo))
-            hue_button.pack(pady=10, side=RIGHT)
+        negative_button = Button(frame, text="Negative Image", font=("Times New Roman", 15),
+                                 command=lambda: add_neg(fphoto))
+        negative_button.pack(pady=10, side=LEFT)
 
-            ascii_button = Button(frame, text="Convert Image to Ascii", font=("Times New Roman", 15),
-                                  command=lambda: self.add_ascii(photo))
-            ascii_button.pack(pady=10, side=RIGHT)
-        except NameError as e:
-            if win2.state() == "normal": win2.focus()
+        hue_button = Button(frame, text="Change Image Hue", font=("Times New Roman", 15),
+                            command=lambda: self.add_hue(photo))
+        hue_button.pack(pady=10, side=RIGHT)
 
-    def add_negative(self, img):
-        try:
-            win3 = tk.Toplevel()
-            win3.geometry("600x600")
-            win3["bg"] = "black"
-            lb = Label(win3, text="Here is your negative image!", fg='red', font=("Ink Free", 25))
-            lb.pack()
-            frame = Frame(win3)
-            frame.pack(side=TOP)
-        except NameError as e:
-            if win3.state() == "normal": win3.focus()
+        ascii_button = Button(frame, text="Convert Image to Ascii", font=("Times New Roman", 15),
+                              command=lambda: self.add_ascii(photo))
+        ascii_button.pack(pady=10, side=RIGHT)
+
+        def add_neg(photo):
+            fphoto = create.negative(photo.filename)
+            tkphoto = ImageTk.PhotoImage(fphoto)
+            label.configure(image=tkphoto)
+            label.image = tkphoto
 
     def add_hue(self, img):
         try:
             win4 = tk.Toplevel()
-            win4.geometry("600x600")
+            win4.geometry("1024x768")
             win4["bg"] = "black"
             lb = Label(win4, text="Select Hue", fg='red', font=("Ink Free", 25))
             lb.pack()
@@ -296,73 +296,35 @@ class Example(Browse):
             frame.pack(side=TOP)
 
             # add buttons so user can enter hue
-            warm_button = Button(frame, text="Add Warm Hue", font=("Times New Roman", 15),
-                                 command=lambda: self.warm(img))
+            warm_button = Button(frame, text="Add Warm Hue", font=("Times New Roman", 15), )
             warm_button.pack(pady=10, side=TOP)
 
-            verdant_button = Button(frame, text="Add Verdant Hue", font=("Times New Roman", 15),
-                                    command=lambda: self.verdant(img))
+            verdant_button = Button(frame, text="Add Verdant Hue", font=("Times New Roman", 15), )
             verdant_button.pack(pady=10, side=BOTTOM)
 
-            cool_button = Button(frame, text="Add Cool Hue", font=("Times New Roman", 15),
-                                 command=lambda: self.cool(img))
+            cool_button = Button(frame, text="Add Cool Hue", font=("Times New Roman", 15), )
             cool_button.pack(pady=10, side=BOTTOM)
         except NameError as e:
             if win4.state() == "normal": win4.focus()
 
-    def add_ascii(self, img):
-        try:
-            win = tk.Toplevel()
-            win.geometry("600x600")
-            win["bg"] = "black"
-            lb = Label(win, text="Here is your ascii image!", fg='red', font=("Ink Free", 25))
-            lb.pack()
-            frame = Frame(win)
-            frame.pack(side=TOP)
 
-            self.intensity_entry = Entry(frame, bd=5, width=20)
-            self.intensity_entry.grid(row=4, column=1, columnspan=3, padx=1, pady=1)
-            intensity_button = Button(frame, text="Enter Intensity for Added Fun! (Ex: 100)",
-                                      font=("Times New Roman", 10))
-            intensity_button.grid(row=4, column=20, columnspan=3, padx=1, pady=1)
-        except NameError as e:
-            if win.state() == "normal": win.focus()
+def add_ascii(self, img):
+    try:
+        win5 = tk.Toplevel()
+        win5.geometry("1024x768")
+        win5["bg"] = "black"
+        lb = Label(win5, text="Here is your ascii image!", fg='red', font=("Ink Free", 25))
+        lb.pack()
+        frame = Frame(win5)
+        frame.pack(side=TOP)
 
-    def warm(self, img):
-        try:
-            win = tk.Toplevel()
-            win.geometry("600x600")
-            win["bg"] = "black"
-            lb = Label(win, text="Here is your WARM image!", fg='red', font=("Ink Free", 25))
-            lb.pack()
-            frame = Frame(win)
-            frame.pack(side=TOP)
-        except NameError as e:
-            if win.state() == "normal": win.focus()
-
-    def verdant(self, img):
-        try:
-            win = tk.Toplevel()
-            win.geometry("600x600")
-            win["bg"] = "black"
-            lb = Label(win, text="Here is your VERDANT image!", fg='red', font=("Ink Free", 25))
-            lb.pack()
-            frame = Frame(win)
-            frame.pack(side=TOP)
-        except NameError as e:
-            if win.state() == "normal": win.focus()
-
-    def cool(self, img):
-        try:
-            win = tk.Toplevel()
-            win.geometry("600x600")
-            win["bg"] = "black"
-            lb = Label(win, text="Here is your COOL image!", fg='red', font=("Ink Free", 25))
-            lb.pack()
-            frame = Frame(win)
-            frame.pack(side=TOP)
-        except NameError as e:
-            if win.state() == "normal": win.focus()
+        self.intensity_entry = Entry(frame, bd=5, width=20)
+        self.intensity_entry.grid(row=4, column=1, columnspan=3, padx=1, pady=1)
+        intensity_button = Button(frame, text="Enter Intensity for Added Fun! (Ex: 100)",
+                                  font=("Times New Roman", 10))
+        intensity_button.grid(row=4, column=20, columnspan=3, padx=1, pady=1)
+    except NameError as e:
+        if win5.state() == "normal": win5.focus()
 
 
 # background image
@@ -371,4 +333,3 @@ e.pack()
 
 # show Window
 web.mainloop()
-
