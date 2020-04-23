@@ -25,21 +25,21 @@ Libraries required:
 * os
 
 Other resources required:
-chromedriver (version 81 used)
+* chromedriver (version 81 used)
 
 Extra features implemented:
-Originally, a feature was intended to create a text string from an input image, however this was impractical to implement.
+* Originally, a feature was intended to create a text string from an input image, however this was impractical to implement.
 Rather, two functions were created to develop Ascii Art from the image, the more rudimentary using 8 values, the more
 condensed using 36 values.
 
 Division of Labor:
 
-J:
-  All functions in create.py and implementations in PixelArtGUI.py
-    All functions are original code, Ascii values found using ord() and https://en.wikipedia.org/wiki/Block_Elements
-  Minor edits on GUI visualizations: word_search visualizations, search_image visualizations
-    Visual update on search_word: frame/label edits, beautification
-    Frame/picture formatting in search_image, image updating / button functionality
+* J:
+  * All functions in create.py and implementations in PixelArtGUI.py
+    * All functions are original code, Ascii values found using ord() and https://en.wikipedia.org/wiki/Block_Elements
+  * Minor edits on GUI visualizations: word_search visualizations, search_image visualizations
+    * Visual update on search_word: frame/label edits, beautification
+    * Frame/picture formatting in search_image, image updating / button functionality
   
   
 Betty:
