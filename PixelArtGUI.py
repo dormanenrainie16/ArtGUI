@@ -89,7 +89,7 @@ class Example(Frame):
         array = []
         # Uses google chrome
         array = download_google_staticimages(user_input)
-        for i in range(len(array)):
+        for i in range(1, len(array)):
             master = create.blender(array[i], master, counter)
             counter += 1
         pic.view_pic(master)
