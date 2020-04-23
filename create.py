@@ -20,7 +20,7 @@ def blender(added, master, count, _w=1024, _h=768):
 
     if master.size == (0, 0):
         saved = added
-        
+
     added = added.convert(mode='RGBA')
     saved = saved.convert(mode='RGBA')
     added = added.resize((_w, _h))
