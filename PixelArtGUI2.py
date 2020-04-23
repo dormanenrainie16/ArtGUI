@@ -122,7 +122,7 @@ class Example(Browse):
             win2 = tk.Toplevel()
             win2.geometry("600x600")
             win2["bg"] = "black"
-            lb = Label(win2, text="Select an image to pixelize", fg='red', font=("Ink Free", 25))
+            lb = Label(win2, text="Select Image, then Select Edit Type", fg='red', font=("Ink Free", 20))
             lb.pack()
             frame = Frame(win2)
             frame.pack(side=TOP)
@@ -137,38 +137,19 @@ class Example(Browse):
 
             photo = Image.open(filename)
             photo = photo.resize((400, 500), Image.ANTIALIAS)
-            photo = ImageTk.PhotoImage(photo)
+            photo = ImageTk.PhotoImage(photo) #saves copy of image
             label = Label(win2, image=photo)
             label.image = photo
-            label.pack(side = TOP, fill=X)
+            label.pack(side = BOTTOM)
 
             pixel_button = Button(frame, text = "Pixelize Image", font=("Times New Roman", 15))
-            pixel_button.pack(pady=10, side = BOTTOM, fill=X)
+            pixel_button.pack(pady=10, side = LEFT)
 
+            hue_button = Button(frame, text="Change Image Hue", font=("Times New Roman", 15))
+            hue_button.pack(pady=10, side=RIGHT)
 
-
-
-
-            '''browse_button = Button(frame, text="Browse Images", font=("Times New Roman", 15), command=self.browse)
-            browse_button.pack(side=TOP, fill=X, expand = True)'''
-
-            #file_browser = Browse(web, initialdir=r"C:\Users",
-                                  #filetypes=(('jpg files', '*.jpg',),('png files', '*.png'),
-                                  #('jpeg files', '*.jpeg')))
-            #file_browser.pack(fill='x', expand=True)
-
-
-
-    '''def browse(self):
-        """ Browses a .jpg or .jpeg file or all files and then puts it on the entry.
-        """
-        self.filepath.set(fd.askopenfilename(initialdir=self._initaldir,
-                                                #filetypes=self._filetypes))
-        my_label = Label(win2, text=self.filepath)
-        myimage = ImageTk.PhotoImage(Image.open(filepath))
-        my_image_label =Label(win2,image=my_image).pack()'''
-
-
+            ascii_button = Button(frame, text="Convert Image to Ascii", font=("Times New Roman", 15))
+            ascii_button.pack(pady=10, side=RIGHT)
 
 
 
