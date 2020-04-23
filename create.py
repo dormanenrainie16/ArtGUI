@@ -148,23 +148,151 @@ def switcher(choice):
 
 # asc_cond: ascii_condensed
 # produces a more condensed version of the Ascii picture
-# INCOMPLETE: MIRRORS ascii_pic AS OF NOW.
 def asc_cond(pic, intensity=1):
     asc = Image.fromarray(load_pic(pic)).convert("L")
     asc = asc.resize((int(asc.width * 2 / intensity), int(asc.height / intensity)))
     while asc.width % 2: asc = asc.resize(((asc.width - 1), asc.height))
     while asc.height % 2: asc = asc.resize((asc.width, (asc.height - 1)))
     asc = np.array(asc)
-
     p_name = str.split(pic, ".")
     line = ""
     pic_txt = open(p_name[0] + ".txt", "w")
-    for i in range(asc.shape[0]):
-        for j in range(asc.shape[1]):
-            line = line.__add__(chr(switcher(int(asc[i, j] / 32))))  # print(line)
+
+    for i in range(0, asc.shape[0], 2):
+        for j in range(0, asc.shape[1], 2):
+            line = line.__add__(chr(adv_swtch(int(asc[i, j]),
+                                              int(asc[i, j + 1]),
+                                              int(asc[i + 1, j]),
+                                              int(asc[i + 1, j + 1]))))
         pic_txt.write(line + "\n")
         line = ""
+
     return asc
+    # line = line.__add__(chr(switcher(int(asc[i, j] / 32))))  # print(line)
+
+
+def adv_swtch(on, tw, th, fr):
+    one = int(on / 32)
+    two = int(tw / 32)
+    three = int(th / 32)
+    four = int(fr / 32)
+
+    same = set()
+    if one == two:
+        same.add(1)
+        same.add(2)
+    if one == three:
+        same.add(1)
+        same.add(3)
+    if one == four:
+        same.add(1)
+        same.add(4)
+    if two == three:
+        same.add(2)
+        same.add(3)
+    if two == four:
+        same.add(2)
+        same.add(4)
+    if three == four:
+        same.add(3)
+        same.add(4)
+
+    prominent = max(one, two, three, four)
+
+    # All unique, determine which is strongest value.
+    if same.__len__() == 0:
+        e_zero = {
+            1: 9624,  # Block up l
+            2: 9629,  # Block up r
+            3: 9622,  # Block low l
+            4: 9621,  # Block low r
+            5: 39,    # apostrophe
+            6: 39,    # apostrophe
+            7: 46,    # period
+            8: 46     # period
+        }
+        if prominent > 3:
+            if one > two and one > three and one > four: return e_zero.get(1)
+            elif two > one and two > three and two > four: return e_zero.get(2)
+            elif three > one and three > two and three > four: return e_zero.get(3)
+            else: return e_zero.get(4)
+        else:
+            if one > two and one > three and one > four: return e_zero.get(5)
+            elif two > one and two > three and two > four: return e_zero.get(6)
+            elif three > one and three > two and three > four: return e_zero.get(7)
+            else: return e_zero.get(8)
+
+    # 2 are equal, determine which and their intensity
+    elif same.__len__() == 2:
+        e_one = {
+            1: 9600,  # Upper half block
+            2: 9612,  # Left Half block
+            3: 9626,  # TL-BR block
+            4: 9630,  # TR-BL block
+            5: 9616,  # Right half block
+            6: 9604,  # Lower half block
+            7: 9620,  # Upper eighth block
+            8: 9614,  # Left quarter block
+            9: 92,    # \
+            10: 47,   # /
+            11: 9621,  # Right eighth block
+            12: 9602,  # Lower eighth block
+        }
+        if prominent > 3:
+            if same.__contains__(1):
+                if same.__contains__(2): return e_one.get(1)
+                elif same.__contains__(3): return e_one.get(2)
+                elif same.__contains__(4): return e_one.get(3)
+            elif same.__contains__(2):
+                if same.__contains__(3): return e_one.get(4)
+                else: return e_one.get(5)
+            else: return e_one.get(6)
+        else:
+            if same.__contains__(1):
+                if same.__contains__(2): return e_one.get(7)
+                elif same.__contains__(3): return e_one.get(8)
+                elif same.__contains__(4): return e_one.get(9)
+            elif same.__contains__(2):
+                if same.__contains__(3): return e_one.get(10)
+                else: return e_one.get(11)
+            else: return e_one.get(12)
+
+    # 3 are equal, determine intensity and formation
+    elif same.__len__() == 3:
+        e_two = {
+            1: 9631,  # J block
+            2: 9625,  # L block
+            3: 9628,  # 7 block
+            4: 9627,  # F block
+            5: 74,  # J
+            6: 76,  # L
+            7: 55,  # 7
+            8: 70,  # F
+        }
+        if prominent > 3:
+            if not same.__contains__(1): return e_two.get(1)
+            elif not same.__contains__(2): return e_two.get(2)
+            elif not same.__contains__(3): return e_two.get(3)
+            else: return e_two.get(4)
+        else:
+            if not same.__contains__(1): return e_two.get(5)
+            elif not same.__contains__(2): return e_two.get(6)
+            elif not same.__contains__(3): return e_two.get(7)
+            else: return e_two.get(8)
+
+    # All 4 equal, determine value of one and return
+    elif same.__len__() == 4:
+        e_three = {
+            0: 32,  # space
+            1: 9617,  # "░"
+            2: 9617,  # "░"
+            3: 9618,  # "░"
+            4: 9618,  # "▒"
+            5: 9619,  # "░"
+            6: 9619,  # "▓"
+            7: 9608  # "█"
+        }
+        return e_three.get(one)
 
 # Other fun ideas:
 # replace instances of a single color for another (i.e. every red becomes blue)
