@@ -17,5 +17,5 @@ def view_pic(name):
     plt.imshow(name)
     plt.axis('off')
     plt.tight_layout()
-    #plt.show()
+    plt.show()
     return plt
