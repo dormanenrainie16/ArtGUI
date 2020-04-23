@@ -33,6 +33,7 @@ Rather, two functions were created to develop Ascii Art from the image, the more
 condensed using 36 values.
 
 Division of Labor:
+
 J:
   All functions in create.py and implementations in PixelArtGUI.py
     All functions are original code, Ascii values found using ord() and https://en.wikipedia.org/wiki/Block_Elements
