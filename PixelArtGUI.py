@@ -61,9 +61,9 @@ class Example(Browse):
         # Buttons
         frame = Frame(master)
         frame.pack(side=BOTTOM)
-        self.search_word_button = Button(frame, text="Search word", command=self.search_word)
+        self.search_word_button = Button(frame, text="Search Word", command=self.search_word)
         self.search_word_button.pack(side=TOP, fill=X)
-        self.search_word_button = Button(frame, text="Search Image(s)", command=self.search_image)
+        self.search_word_button = Button(frame, text="Edit Image", command=self.search_image)
         self.search_word_button.pack(side=TOP, fill=X)
         self.button = Button(frame, text="QUIT", fg="red", command=frame.quit)
         self.button.pack(side=BOTTOM, fill=X)
