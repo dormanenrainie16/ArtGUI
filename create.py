@@ -91,14 +91,15 @@ def hue(var, pic, _w=1024, _h=768, intensity=1):
         color = [0, 0, 0.5]
     else:
         color = color  # Yeah do nothing.
-
-    hue_pic = np.ndarray((int(_h / intensity), int(_w / intensity), 3))
-    for i in range(0, int(_h / intensity)):
-        for j in range(0, int(_w / intensity)):
+    pict = Image.fromarray(load_pic(pic))
+    hue_pic = np.ndarray((int(pict.width), int(pict.height), 3))
+    for i in range(0, int(pict.width)):
+        for j in range(0, int(pict.height)):
             hue_pic[i, j] = color
     hue_pic = Image.fromarray((hue_pic * 255).astype(np.uint8))
     resized = Image.fromarray(load_pic(pic))
-    resized = resized.resize((int(_w / intensity), int(_h / intensity)))
+    resized = resized.resize((int(pict.height), int(pict.width)))
+
     return Image.blend(resized, hue_pic, 0.5)
 
 
@@ -106,28 +107,33 @@ def hue(var, pic, _w=1024, _h=768, intensity=1):
 # convert a picture to the photo-negative version
 #   ALL VARIABLES REDUNDANT TO hue; SAME FUNCTIONALITY UNDER DIFFERENT PARAM.
 def negative(pic):
-    pict = load_pic(pic)
+    pict = Image.fromarray(load_pic(pic))
+    pict = np.array(pict.convert(mode='RGB'))
+
     neg_pic = np.ndarray((pict.shape[0], pict.shape[1], 3))
     for i in range(0, pict.shape[0]):
         for j in range(0, pict.shape[1]):
             neg_pic[i, j] = pict[i, j]
+
     return Image.fromarray((neg_pic * 255).astype(np.uint8))
 
 
 # ascii:
 # convert a picture to a rudimentary ASCII translation
-def ascii_pic(pic, intensity=1):
+def ascii_pic(pic, intensity=10):
+
     asc = Image.fromarray(load_pic(pic)).convert("L")
     asc = np.array(asc.resize((int(asc.width * 2 / intensity), int(asc.height / intensity))))
-
     p_name = str.split(pic, ".")
     line = ""
-    pic_txt = open(p_name[0] + ".txt", "w")
+    pic_txt = open(p_name[0] + "_ascii.txt", "w")
+
     for i in range(asc.shape[0]):
         for j in range(asc.shape[1]):
             line = line.__add__(chr(switcher(int(asc[i, j] / 32))))  # print(line)
         pic_txt.write(line + "\n")
         line = ""
+
     return asc
 
 
@@ -156,7 +162,7 @@ def asc_cond(pic, intensity=1):
     asc = np.array(asc)
     p_name = str.split(pic, ".")
     line = ""
-    pic_txt = open(p_name[0] + ".txt", "w")
+    pic_txt = open(p_name[0] + "_condensed.txt", "w")
 
     for i in range(0, asc.shape[0], 2):
         for j in range(0, asc.shape[1], 2):
@@ -206,21 +212,29 @@ def adv_swtch(on, tw, th, fr):
             2: 9629,  # Block up r
             3: 9622,  # Block low l
             4: 9621,  # Block low r
-            5: 39,    # apostrophe
-            6: 39,    # apostrophe
-            7: 46,    # period
-            8: 46     # period
+            5: 39,  # apostrophe
+            6: 39,  # apostrophe
+            7: 46,  # period
+            8: 46  # period
         }
         if prominent > 3:
-            if one > two and one > three and one > four: return e_zero.get(1)
-            elif two > one and two > three and two > four: return e_zero.get(2)
-            elif three > one and three > two and three > four: return e_zero.get(3)
-            else: return e_zero.get(4)
+            if one > two and one > three and one > four:
+                return e_zero.get(1)
+            elif two > one and two > three and two > four:
+                return e_zero.get(2)
+            elif three > one and three > two and three > four:
+                return e_zero.get(3)
+            else:
+                return e_zero.get(4)
         else:
-            if one > two and one > three and one > four: return e_zero.get(5)
-            elif two > one and two > three and two > four: return e_zero.get(6)
-            elif three > one and three > two and three > four: return e_zero.get(7)
-            else: return e_zero.get(8)
+            if one > two and one > three and one > four:
+                return e_zero.get(5)
+            elif two > one and two > three and two > four:
+                return e_zero.get(6)
+            elif three > one and three > two and three > four:
+                return e_zero.get(7)
+            else:
+                return e_zero.get(8)
 
     # 2 are equal, determine which and their intensity
     elif same.__len__() == 2:
@@ -233,29 +247,41 @@ def adv_swtch(on, tw, th, fr):
             6: 9604,  # Lower half block
             7: 9620,  # Upper eighth block
             8: 9614,  # Left quarter block
-            9: 92,    # \
-            10: 47,   # /
+            9: 92,  # \
+            10: 47,  # /
             11: 9621,  # Right eighth block
             12: 9602,  # Lower eighth block
         }
         if prominent > 3:
             if same.__contains__(1):
-                if same.__contains__(2): return e_one.get(1)
-                elif same.__contains__(3): return e_one.get(2)
-                elif same.__contains__(4): return e_one.get(3)
+                if same.__contains__(2):
+                    return e_one.get(1)
+                elif same.__contains__(3):
+                    return e_one.get(2)
+                elif same.__contains__(4):
+                    return e_one.get(3)
             elif same.__contains__(2):
-                if same.__contains__(3): return e_one.get(4)
-                else: return e_one.get(5)
-            else: return e_one.get(6)
+                if same.__contains__(3):
+                    return e_one.get(4)
+                else:
+                    return e_one.get(5)
+            else:
+                return e_one.get(6)
         else:
             if same.__contains__(1):
-                if same.__contains__(2): return e_one.get(7)
-                elif same.__contains__(3): return e_one.get(8)
-                elif same.__contains__(4): return e_one.get(9)
+                if same.__contains__(2):
+                    return e_one.get(7)
+                elif same.__contains__(3):
+                    return e_one.get(8)
+                elif same.__contains__(4):
+                    return e_one.get(9)
             elif same.__contains__(2):
-                if same.__contains__(3): return e_one.get(10)
-                else: return e_one.get(11)
-            else: return e_one.get(12)
+                if same.__contains__(3):
+                    return e_one.get(10)
+                else:
+                    return e_one.get(11)
+            else:
+                return e_one.get(12)
 
     # 3 are equal, determine intensity and formation
     elif same.__len__() == 3:
@@ -270,15 +296,23 @@ def adv_swtch(on, tw, th, fr):
             8: 70,  # F
         }
         if prominent > 3:
-            if not same.__contains__(1): return e_two.get(1)
-            elif not same.__contains__(2): return e_two.get(2)
-            elif not same.__contains__(3): return e_two.get(3)
-            else: return e_two.get(4)
+            if not same.__contains__(1):
+                return e_two.get(1)
+            elif not same.__contains__(2):
+                return e_two.get(2)
+            elif not same.__contains__(3):
+                return e_two.get(3)
+            else:
+                return e_two.get(4)
         else:
-            if not same.__contains__(1): return e_two.get(5)
-            elif not same.__contains__(2): return e_two.get(6)
-            elif not same.__contains__(3): return e_two.get(7)
-            else: return e_two.get(8)
+            if not same.__contains__(1):
+                return e_two.get(5)
+            elif not same.__contains__(2):
+                return e_two.get(6)
+            elif not same.__contains__(3):
+                return e_two.get(7)
+            else:
+                return e_two.get(8)
 
     # All 4 equal, determine value of one and return
     elif same.__len__() == 4:
