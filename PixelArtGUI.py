@@ -46,13 +46,16 @@ class Example(Browse):
         Frame.__init__(self, master, *args)
         Browse.__init__(self, master, initialdir='', filetypes=())
 
-        self.image = Image.open("/Users/jbujarski/PycharmProjects/proj/pixels.jpg")
+        self.image = Image.open("pixels.jpg")
         self.img_copy = self.image.copy()
         self.blended_entry = Entry()
         self.random_entry = Entry()
         self.image_entry = Entry()
         self.intensity_entry = Entry()
         self.background_image = ImageTk.PhotoImage(self.image)
+
+        self.label = None
+        self.img = None
 
         self.background = Label(self, image=self.background_image)
         self.background.pack()
@@ -61,9 +64,9 @@ class Example(Browse):
         # Buttons
         frame = Frame(master)
         frame.pack(side=BOTTOM)
-        self.search_word_button = Button(frame, text="Search Word", command=self.search_word)
+        self.search_word_button = Button(frame, text="Search word", command=self.search_word)
         self.search_word_button.pack(side=TOP, fill=X)
-        self.search_word_button = Button(frame, text="Edit Image", command=self.search_image)
+        self.search_word_button = Button(frame, text="Search Image(s)", command=self.search_image)
         self.search_word_button.pack(side=TOP, fill=X)
         self.button = Button(frame, text="QUIT", fg="red", command=frame.quit)
         self.button.pack(side=BOTTOM, fill=X)
@@ -87,7 +90,10 @@ class Example(Browse):
             lb1 = Label(win1, text="Image Search By Word", fg='#00ff00', bg='black', font=("Courier", 26))
             lb1.pack()
 
-            ''' WORD SEARCH - NORMAL'''
+            img_frame = self.create_frame(win1)
+            self.label = Label(img_frame)
+            img_frame.pack(side=BOTTOM)
+
             lb2 = Label(win1, text="Enter a word below to search for an image via Google", fg='#00ff00', bg='black',
                         font=("Courier", 14))
             lb2.pack(side=TOP)
@@ -96,7 +102,7 @@ class Example(Browse):
             self.image_entry = Entry(frame, bd=5, width=20)
             self.image_entry.grid(row=0, column=1, columnspan=3, padx=1, pady=1)
             image_button = Button(frame, text="Enter word for Regular Image", font=("Times New Roman", 10),
-                                  command=self.image_entry_res)
+                                  command=lambda: self.image_entry_res(img_frame, win1, self.label))
             image_button.grid(row=0, column=20, columnspan=3, padx=1, pady=1)
 
             '''WORD SEARCH - COMPOSITE/BLENDED'''
@@ -108,7 +114,7 @@ class Example(Browse):
             self.blended_entry = Entry(frame1, bd=5, width=20)
             self.blended_entry.grid(row=4, column=1, columnspan=3, padx=1, pady=1)
             blended_button = Button(frame1, text="Enter word for Blended Image", font=("Times New Roman", 10),
-                                    command=self.blended_entry_res)
+                                    command=lambda: self.blended_entry_res(img_frame, win1, self.label))
             blended_button.grid(row=4, column=20, columnspan=3, padx=1, pady=1)
 
             '''RANDOM IMAGE'''
@@ -117,13 +123,11 @@ class Example(Browse):
             lb4.pack(side=TOP)
             frame2 = Frame(win1)
             frame2.pack(side=TOP)
-
             self.random_entry = Entry(frame2, bd=5)
             self.random_entry.pack(side=LEFT, fill=X)
-            random_seed_button = Button(frame2, text="Enter word for a Random image", font=("Times New Roman", 10),
-                                        command=self.random_entry_res)
+            random_seed_button = Button(frame2, text="Enter word for a random image", font=("Times New Roman", 10),
+                                        command=lambda: self.random_entry_res(img_frame, win1, self.label))
             random_seed_button.pack(side=RIGHT, fill=X)
-
             lb5 = Label(win1, text="Enter an \"intensity\" value, or pixel density (larger = less dense)", fg='#00ff00',
                         bg='black', font=("Courier", 14))
             lb5.pack(side=TOP)
@@ -133,14 +137,20 @@ class Example(Browse):
             self.intensity_entry.pack(side=LEFT, fill=X)
             intenstiy_label = Label(frame3, text="Intensity Level (random image)", font=("Times New Roman", 10))
             intenstiy_label.pack(side=RIGHT, fill=X)
+
         except NameError as e:
             print(e)
             win1 = tk.Toplevel()
 
+    def create_frame(self, window):
+        frame = Frame(window)
+        # frame.pack(side=BOTTOM)
+        return frame
+
     # Stores the results of the entry box (user input) and clears the entry box after
     # Probably should do the algorithm in this function as well
-    def blended_entry_res(self):
-        user_input = ""
+    def blended_entry_res(self, frame, window, label):
+        user_input = "No results"
         user_input = self.blended_entry.get()
         print(user_input)
         self.blended_entry.delete(0, END)
@@ -153,11 +163,20 @@ class Example(Browse):
         for i in range(1, len(array)):
             master = create.blender(array[i], master, counter)
             counter += 1
-        res_fig = pic.view_pic(master)
-        res_fig.show()
-        # res.show()
 
-    def image_entry_res(self):
+        # Get the image so it is ready to be displayed
+        master = master.resize((250, 250), Image.ANTIALIAS)
+        img = ImageTk.PhotoImage(master)
+
+        # Display image in label
+        panel = label
+        panel.image = img
+        panel.config(image=img)
+        panel.pack()
+        panel.photo_ref = img
+        window.update()
+
+    def image_entry_res(self, frame, window, label):
         user_input = ""
         user_input = self.image_entry.get()
         print(user_input)
@@ -171,26 +190,53 @@ class Example(Browse):
         for i in range(1, 2):
             master = create.blender(array[i], master, counter)
             counter += 1
-        res_fig = pic.view_pic(master)
-        res_fig.show()
 
-    def random_entry_res(self):
+        # Get the image so it is ready to be displayed
+        master = master.resize((250, 250), Image.ANTIALIAS)
+        img = ImageTk.PhotoImage(master)
+
+        # Display image in label
+        panel = label
+        panel.image = img
+        panel.config(image=img)
+        panel.pack()
+        panel.photo_ref = img
+        window.update()
+
+    def random_entry_res(self, frame, window, label):
+        user_input = ""
         user_input = self.random_entry.get()
         print(user_input)
         self.random_entry.delete(0, END)
 
         if not self.intensity_entry.get():
             master = create.rand_seed(user_input)
-            res_fig = pic.view_pic(master)
-            res_fig.show()
+            master = master.resize((300, 300), Image.ANTIALIAS)
+            img = ImageTk.PhotoImage(master)
+
+            # Display image in label
+            panel = label
+            panel.image = img
+            panel.config(image=img)
+            panel.pack()
+            panel.photo_ref = img
+            window.update()
         else:
             master = create.rand_seed(user_input, intensity=int(self.intensity_entry.get()))
-            res_fig = pic.view_pic(master)
             self.intensity_entry.delete(0, END)
-            res_fig.show()
+            master = master.resize((300, 300), Image.ANTIALIAS)
+            img = ImageTk.PhotoImage(master)
 
-        # opens a new window to search for image(s)
-        # by Rainie Dormanen
+            # Display image in label
+            panel = label
+            panel.image = img
+            panel.config(image=img)
+            panel.pack()
+            panel.photo_ref = img
+            window.update()
+
+    # opens a new window to search for image(s)
+    # by Rainie Dormanen
     def search_image(self):
         try:
             win2 = tk.Toplevel()
@@ -214,15 +260,15 @@ class Example(Browse):
             label.pack(side=BOTTOM)
 
             negative_button = Button(frame, text="Negative Image", font=("Times New Roman", 15),
-                                          command=lambda: self.add_negative(photo))
+                                     command=lambda: self.add_negative(photo))
             negative_button.pack(pady=10, side=LEFT)
 
             hue_button = Button(frame, text="Change Image Hue", font=("Times New Roman", 15),
-                                     command=lambda: self.add_hue(photo))
+                                command=lambda: self.add_hue(photo))
             hue_button.pack(pady=10, side=RIGHT)
 
             ascii_button = Button(frame, text="Convert Image to Ascii", font=("Times New Roman", 15),
-                                       command=lambda: self.add_ascii(photo))
+                                  command=lambda: self.add_ascii(photo))
             ascii_button.pack(pady=10, side=RIGHT)
         except NameError as e:
             if win2.state() == "normal": win2.focus()
@@ -250,20 +296,19 @@ class Example(Browse):
             frame.pack(side=TOP)
 
             # add buttons so user can enter hue
-            warm_button = Button(frame, text="Add Warm Hue", font=("Times New Roman", 15), 
-                                 command =lambda : self.warm(img) )
+            warm_button = Button(frame, text="Add Warm Hue", font=("Times New Roman", 15),
+                                 command=lambda: self.warm(img))
             warm_button.pack(pady=10, side=TOP)
 
-            verdant_button = Button(frame, text="Add Verdant Hue", font=("Times New Roman", 15), 
-                                    command =lambda : self.verdant(img) )
+            verdant_button = Button(frame, text="Add Verdant Hue", font=("Times New Roman", 15),
+                                    command=lambda: self.verdant(img))
             verdant_button.pack(pady=10, side=BOTTOM)
 
-            cool_button = Button(frame, text="Add Cool Hue", font=("Times New Roman", 15), 
-                                 command =lambda : self.cool(img))
+            cool_button = Button(frame, text="Add Cool Hue", font=("Times New Roman", 15),
+                                 command=lambda: self.cool(img))
             cool_button.pack(pady=10, side=BOTTOM)
         except NameError as e:
             if win4.state() == "normal": win4.focus()
-
 
     def add_ascii(self, img):
         try:
@@ -282,7 +327,7 @@ class Example(Browse):
             intensity_button.grid(row=4, column=20, columnspan=3, padx=1, pady=1)
         except NameError as e:
             if win.state() == "normal": win.focus()
-                
+
     def warm(self, img):
         try:
             win = tk.Toplevel()
@@ -294,7 +339,7 @@ class Example(Browse):
             frame.pack(side=TOP)
         except NameError as e:
             if win.state() == "normal": win.focus()
-            
+
     def verdant(self, img):
         try:
             win = tk.Toplevel()
@@ -306,7 +351,7 @@ class Example(Browse):
             frame.pack(side=TOP)
         except NameError as e:
             if win.state() == "normal": win.focus()
-            
+
     def cool(self, img):
         try:
             win = tk.Toplevel()
@@ -318,8 +363,6 @@ class Example(Browse):
             frame.pack(side=TOP)
         except NameError as e:
             if win.state() == "normal": win.focus()
-                
-                
 
 
 # background image
@@ -328,3 +371,4 @@ e.pack()
 
 # show Window
 web.mainloop()
+
