@@ -25,7 +25,7 @@ web.geometry("600x600")
 
 # title-label
 web.title("Pixel Art Generator")
-w = Label(web, text="Welcome to Pixel Art", font=("Ink Free", 36))
+w = Label(web, text="Welcome to the Pixel Art GUI", bg='black', fg='#00ff00', font=("Courier", 32))
 w.pack()
 
 
@@ -64,11 +64,11 @@ class Example(Browse):
         # Buttons
         frame = Frame(master)
         frame.pack(side=BOTTOM)
-        self.search_word_button = Button(frame, text="Search word", command=self.search_word)
+        self.search_word_button = Button(frame, text="Search word", highlightbackground='black', command=self.search_word)
         self.search_word_button.pack(side=TOP, fill=X)
-        self.search_word_button = Button(frame, text="Search Image(s)", command=self.search_image)
+        self.search_word_button = Button(frame, text="Search Image(s)", highlightbackground='black', command=self.search_image)
         self.search_word_button.pack(side=TOP, fill=X)
-        self.button = Button(frame, text="QUIT", fg="red", command=frame.quit)
+        self.button = Button(frame, text="QUIT", fg="red", highlightbackground='black', command=frame.quit)
         self.button.pack(side=BOTTOM, fill=X)
 
     # resize background image on main window
@@ -133,7 +133,7 @@ class Example(Browse):
             lb5.pack(side=TOP)
             frame3 = Frame(win1)
             frame3.pack(side=TOP)
-            self.intensity_entry = Entry(frame3, bd=2, width=10)
+            self.intensity_entry = Entry(frame3, bd=5, width=10)
             self.intensity_entry.pack(side=LEFT, fill=X)
             intenstiy_label = Label(frame3, text="Intensity Level (random image)", font=("Times New Roman", 10))
             intenstiy_label.pack(side=RIGHT, fill=X)
@@ -149,6 +149,7 @@ class Example(Browse):
 
         # Stores the results of the entry box (user input) and clears the entry box after
         # Probably should do the algorithm in this function as well
+
     def blended_entry_res(self, frame, window, label):
         user_input = "No results"
         user_input = self.blended_entry.get()
@@ -181,7 +182,6 @@ class Example(Browse):
         # Display image in label
 
         panel.image = img
-
 
     def image_entry_res(self, frame, window, label):
         user_input = ""
@@ -242,15 +242,14 @@ class Example(Browse):
             panel.photo_ref = img
             window.update()
 
-
     # opens a new window to search for image(s)
     # by Rainie Dormanen
     def search_image(self):
         win2 = tk.Toplevel()
         win2["bg"] = "black"
-        lb = Label(win2, text="Upload Image to Edit", fg='red', font=("Ink Free", 25))
+        lb = Label(win2, text="Edit Image", fg='#00ff00', bg='black', font=("Courier", 25))
         lb.pack()
-        frame = Frame(win2)
+        frame = Frame(win2, bg='black')
         frame.pack(side=TOP)
 
         filename = fd.askopenfilename(initialdir=r"C:\Users", title="Browse Images",
@@ -259,72 +258,79 @@ class Example(Browse):
                                                  ('jpeg files', '*.jpeg')))
 
         fphoto = Image.open(filename)
-        geo = str(fphoto.width) + "x" + str(fphoto.height + 100)
+        _w = min(1200, fphoto.width)
+        _h = min(800, fphoto.height)
+        fphoto = fphoto.resize((_w, _h), Image.ANTIALIAS)
+        geo = str(str(_w) + "x" + str(_h + 100))
+
         win2.geometry(geo)
 
         tkphoto = ImageTk.PhotoImage(fphoto)  # saves copy of image
         label = Label(win2, image=tkphoto)
         label.image = tkphoto
         label.pack(side=BOTTOM)
+        # ORIGINAL
+        original_button = Button(frame, text="Original Image", highlightbackground='black', font=("Times New Roman", 15),
+                                 command=lambda: revert(fphoto))
+        original_button.pack(pady=10, side=LEFT)
 
-        negative_button = Button(frame, text="Negative Image", font=("Times New Roman", 15),
-                                 command=lambda: add_neg(fphoto))
+        # NEGATIVE
+        negative_button = Button(frame, text="Negative Image", highlightbackground='black', font=("Times New Roman", 15),
+                                 command=lambda: add_neg(Image.open(filename)))
         negative_button.pack(pady=10, side=LEFT)
 
-        hue_button = Button(frame, text="Change Image Hue", font=("Times New Roman", 15),
-                            command=lambda: self.add_hue(photo))
-        hue_button.pack(pady=10, side=RIGHT)
+        # WARM
+        warm_button = Button(frame, text="Add Warm Hues", highlightbackground='black', font=("Times New Roman", 15),
+                             command=lambda: add_hue(Image.open(filename), "warm"))
+        warm_button.pack(pady=10, side=LEFT)
 
-        ascii_button = Button(frame, text="Convert Image to Ascii", font=("Times New Roman", 15),
-                              command=lambda: self.add_ascii(photo))
-        ascii_button.pack(pady=10, side=RIGHT)
+        # VERDANT
+        verdant_button = Button(frame, text="Add Verdant Hues", highlightbackground='black', font=("Times New Roman", 15),
+                                command=lambda: add_hue(Image.open(filename), "verdant"))
+        verdant_button.pack(pady=10, side=LEFT)
 
-        def add_neg(photo):
-            fphoto = create.negative(photo.filename)
+        # COOL
+        cool_button = Button(frame, text="Add Cool Hues", highlightbackground='black', font=("Times New Roman", 15),
+                             command=lambda: add_hue(Image.open(filename), "cool"))
+        cool_button.pack(pady=10, side=LEFT)
+
+        # ASCII
+        ascii_button = Button(frame, text="Convert Image to Ascii", highlightbackground='black', font=("Times New Roman", 15),
+                              command=lambda: add_ascii(Image.open(filename)))
+        ascii_button.pack(pady=10, side=LEFT)
+
+        # ASCII CONDENSED
+        cond_ascii_button = Button(frame, text="Convert Image to Condensed Ascii", highlightbackground='black',
+                                   font=("Times New Roman", 15),
+                                   command=lambda: add_cond_ascii(Image.open(filename)))
+        cond_ascii_button.pack(pady=10, side=LEFT)
+
+        def revert(photo):
+            fphoto = Image.open(filename)
+            fphoto = fphoto.resize((_w, _h), Image.ANTIALIAS)
             tkphoto = ImageTk.PhotoImage(fphoto)
             label.configure(image=tkphoto)
             label.image = tkphoto
 
-    def add_hue(self, img):
-        try:
-            win4 = tk.Toplevel()
-            win4.geometry("1024x768")
-            win4["bg"] = "black"
-            lb = Label(win4, text="Select Hue", fg='red', font=("Ink Free", 25))
-            lb.pack()
-            frame = Frame(win4)
-            frame.pack(side=TOP)
+        def add_neg(photo):
+            fphoto = create.negative(filename)
+            fphoto = fphoto.resize((_w, _h), Image.ANTIALIAS)
+            tkphoto = ImageTk.PhotoImage(fphoto)
+            label.configure(image=tkphoto)
+            label.image = tkphoto
 
-            # add buttons so user can enter hue
-            warm_button = Button(frame, text="Add Warm Hue", font=("Times New Roman", 15), )
-            warm_button.pack(pady=10, side=TOP)
+        def add_hue(photo, str):
+            fphoto = create.hue(str, filename)
+            fphoto = fphoto.resize((_w, _h), Image.ANTIALIAS)
+            tkphoto = ImageTk.PhotoImage(fphoto)
+            label.configure(image=tkphoto)
+            label.image = tkphoto
 
-            verdant_button = Button(frame, text="Add Verdant Hue", font=("Times New Roman", 15), )
-            verdant_button.pack(pady=10, side=BOTTOM)
+        def add_ascii(img):
+            create.ascii_pic(filename, intensity=10)
 
-            cool_button = Button(frame, text="Add Cool Hue", font=("Times New Roman", 15), )
-            cool_button.pack(pady=10, side=BOTTOM)
-        except NameError as e:
-            if win4.state() == "normal": win4.focus()
-
-
-def add_ascii(self, img):
-    try:
-        win5 = tk.Toplevel()
-        win5.geometry("1024x768")
-        win5["bg"] = "black"
-        lb = Label(win5, text="Here is your ascii image!", fg='red', font=("Ink Free", 25))
-        lb.pack()
-        frame = Frame(win5)
-        frame.pack(side=TOP)
-
-        self.intensity_entry = Entry(frame, bd=5, width=20)
-        self.intensity_entry.grid(row=4, column=1, columnspan=3, padx=1, pady=1)
-        intensity_button = Button(frame, text="Enter Intensity for Added Fun! (Ex: 100)",
-                                  font=("Times New Roman", 10))
-        intensity_button.grid(row=4, column=20, columnspan=3, padx=1, pady=1)
-    except NameError as e:
-        if win5.state() == "normal": win5.focus()
+        def add_cond_ascii(img):
+            create.asc_cond(filename, intensity=5)
 
 
 # background image
