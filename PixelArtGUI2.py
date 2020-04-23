@@ -59,9 +59,9 @@ class Example(Browse):
         # Buttons
         frame = Frame(master)
         frame.pack(side=BOTTOM)
-        self.search_word_button = Button(frame, text="Search word", command=self.search_word)
+        self.search_word_button = Button(frame, text="Search Word", command=self.search_word)
         self.search_word_button.pack(side=TOP, fill=X)
-        self.search_word_button = Button(frame, text="Search Image(s)", command=self.search_image)
+        self.search_word_button = Button(frame, text="Pixelize Image", command=self.search_image)
         self.search_word_button.pack(side=TOP, fill=X)
         self.button = Button(frame, text="QUIT", fg="red", command=frame.quit)
         self.button.pack(side=BOTTOM, fill=X)
@@ -122,7 +122,7 @@ class Example(Browse):
             win2 = tk.Toplevel()
             win2.geometry("600x600")
             win2["bg"] = "black"
-            lb = Label(win2, text="Select an image or images to get Word", fg='red', font=("Ink Free", 25))
+            lb = Label(win2, text="Select an image to pixelize", fg='red', font=("Ink Free", 25))
             lb.pack()
             frame = Frame(win2)
             frame.pack(side=TOP)
@@ -132,7 +132,7 @@ class Example(Browse):
                                              ('png files', '*.png'),
                                              ('jpeg files', '*.jpeg')))
 
-            my_label = Label(win2, text=filename).pack()
+            #my_label = Label(win2, text=filename).pack()
 
 
             photo = Image.open(filename)
@@ -140,11 +140,10 @@ class Example(Browse):
             photo = ImageTk.PhotoImage(photo)
             label = Label(win2, image=photo)
             label.image = photo
-            label.pack()
+            label.pack(side = TOP, fill=X)
 
-            label.bind('<Configure>', self._resize_image)
-
-
+            pixel_button = Button(frame, text = "Pixelize Image", font=("Times New Roman", 15))
+            pixel_button.pack(pady=10, side = BOTTOM, fill=X)
 
 
 
