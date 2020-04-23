@@ -293,6 +293,3 @@ def adv_swtch(on, tw, th, fr):
             7: 9608  # "█"
         }
         return e_three.get(one)
-
-# Other fun ideas:
-# replace instances of a single color for another (i.e. every red becomes blue)
