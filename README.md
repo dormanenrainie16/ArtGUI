@@ -43,7 +43,7 @@ Division of Labor:
     * Visual update on search_word: frame/label edits, beautification
     * Frame/picture formatting in search_image, image updating / button functionality
   
-  
+ 
 * Betty:
   * All functions for the web scraper in download_images.py
     * I followed and try to extract google_images_download.py to see how they got their images from Google since this library didn't work unless it ran for a couple of hours. 
@@ -55,7 +55,16 @@ Division of Labor:
     * I created the main window in the GUI using tkinter's widgets and functionalities
     * I also created and provided functionality for the tkinter window when searching for a word
 
-Rainie:
+* Rainie:
+   *All functions in Browse.py and some implmentations in PixelArtGUI.py
+      * Implemented browse functionality by building Browse class to get files from users file libraries 
+      * referenced Youtube and Codeloop https://www.youtube.com/watch?v=ytPw-_EE4KE
+      * https://codeloop.org/how-to-browse-a-file-in-python-tkinter/
+   *Partial GUI implementation and visualization
+      * Built buttons and widgets using tkinter, displayed images
+      * Helped create and implement functions when uploading and using create functions to edit images
+      
+   
 
 
 -----------------------------------------------------------------------------------------------------------------
