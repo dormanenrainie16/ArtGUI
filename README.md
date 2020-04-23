@@ -59,7 +59,7 @@ Division of Labor:
    *All functions in Browse.py and some implmentations in PixelArtGUI.py
       * Implemented browse functionality by building Browse class to get files from users file libraries 
       * referenced Youtube and Codeloop https://www.youtube.com/watch?v=ytPw-_EE4KE
-      * https://codeloop.org/how-to-browse-a-file-in-python-tkinter/
+      * https://codeloop.org/how-to-browse-a-file-in-python-tkinter/  
    *Partial GUI implementation and visualization
       * Built buttons and widgets using tkinter, displayed images
       * Helped create and implement functions when uploading and using create functions to edit images
