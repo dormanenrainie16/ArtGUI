@@ -1,9 +1,9 @@
 # ArtGUI
 Python Group Project - Permits various photo searching/editing capabilities.
 Team Members:
-Betty Tannnuzzo
-Rainie Dormanen
-J Bujarski
+* Betty Tannnuzzo
+* Rainie Dormanen
+* J Bujarski
 
 NOTE: To properly implement the webscraper, chromedriver MUST be included in the PATH used in download_images.py.
 Further, ensure pixels.jpg is in the current working directory.
