@@ -250,19 +250,22 @@ class Example(Browse):
             frame.pack(side=TOP)
 
             # add buttons so user can enter hue
-            warm_button = Button(frame, text="Add Warm Hue", font=("Times New Roman", 15), )
+            warm_button = Button(frame, text="Add Warm Hue", font=("Times New Roman", 15), 
+                                 command =lambda : self.warm(img) )
             warm_button.pack(pady=10, side=TOP)
 
-            verdant_button = Button(frame, text="Add Verdant Hue", font=("Times New Roman", 15), )
+            verdant_button = Button(frame, text="Add Verdant Hue", font=("Times New Roman", 15), 
+                                    command =lambda : self.verdant(img) )
             verdant_button.pack(pady=10, side=BOTTOM)
 
-            cool_button = Button(frame, text="Add Cool Hue", font=("Times New Roman", 15), )
+            cool_button = Button(frame, text="Add Cool Hue", font=("Times New Roman", 15), 
+                                 command =lambda : self.cool(img))
             cool_button.pack(pady=10, side=BOTTOM)
         except NameError as e:
             if win4.state() == "normal": win4.focus()
 
 
-def add_ascii(self, img):
+    def add_ascii(self, img):
         try:
             win5 = tk.Toplevel()
             win5.geometry("600x600")
@@ -279,6 +282,47 @@ def add_ascii(self, img):
             intensity_button.grid(row=4, column=20, columnspan=3, padx=1, pady=1)
         except NameError as e:
             if win5.state() == "normal": win5.focus()
+                
+    def warm(self, img):
+        try:
+            if win4.state() == "normal": win4.focus()
+        except NameError as e:
+            print(e)
+            win4 = tk.Toplevel()
+            win4.geometry("600x600")
+            win4["bg"] = "black"
+            lb = Label(win4, text="Here is your WARM image!", fg='red', font=("Ink Free", 25))
+            lb.pack()
+            frame = Frame(win4)
+            frame.pack(side=TOP)
+    def verdant(self, img):
+        try:
+            if win6.state() == "normal": win6.focus()
+        except NameError as e:
+            print(e)
+            win6 = tk.Toplevel()
+            win6.geometry("600x600")
+            win6["bg"] = "black"
+            lb = Label(win6, text="Here is your VERDANT image!", fg='red', font=("Ink Free", 25))
+            lb.pack()
+            frame = Frame(win6)
+            frame.pack(side=TOP)
+    def cool(self, img):
+        try:
+            if win7.state() == "normal": win7.focus()
+        except NameError as e:
+            print(e)
+            win7 = tk.Toplevel()
+            win7.geometry("600x600")
+            win7["bg"] = "black"
+            lb = Label(win7, text="Here is your COOL image!", fg='red', font=("Ink Free", 25))
+            lb.pack()
+            frame = Frame(win7)
+            frame.pack(side=TOP)
+
+                
+                
+
 
 # background image
 e = Example(web)
