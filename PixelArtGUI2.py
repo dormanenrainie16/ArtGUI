@@ -80,61 +80,38 @@ class Example(Browse):
     # opens new window to search for a word
     def search_word(self):
         try:
+            if win1.state() == "normal": win1.focus()
+        except NameError as e:
+            print(e)
             win1 = tk.Toplevel()
             win1.geometry("600x600")
             win1["bg"] = "black"
-            lb1 = Label(win1, text="Image Search By Word", fg='#00ff00', bg='black', font=("Courier", 26))
-            lb1.pack()
-
-            ''' WORD SEARCH - NORMAL'''
-            lb2 = Label(win1, text="Enter a word below to search for an image via Google", fg='#00ff00', bg='black',
-                        font=("Courier", 14))
-            lb2.pack(side=TOP)
+            lb = Label(win1, text="Enter a word to get an image", fg='red', font=("Ink Free", 26))
+            lb.pack()
             frame = Frame(win1)
             frame.pack(side=TOP)
             self.image_entry = Entry(frame, bd=5, width=20)
-            self.image_entry.grid(row=0, column=1, columnspan=3, padx=1, pady=1)
-            image_button = Button(frame, text="Enter word for Regular Image", font=("Times New Roman", 10),
-                                  command=self.image_entry_res)
-            image_button.grid(row=0, column=20, columnspan=3, padx=1, pady=1)
-
-            '''WORD SEARCH - COMPOSITE/BLENDED'''
-            lb3 = Label(win1, text="Enter a word below to search for a composite image of many results", fg='#00ff00',
-                        bg='black', font=("Courier", 14))
-            lb3.pack(side=TOP)
+            self.image_entry.grid(row = 0, column = 1, columnspan = 3, padx = 1, pady = 1)
+            image_button = Button(frame, text="Enter word for Regular Image", font=("Times New Roman", 10), command=self.image_entry_res)
+            image_button.grid(row = 0, column = 20, columnspan = 3, padx = 1, pady = 1)
             frame1 = Frame(win1)
             frame1.pack(side=TOP)
-            self.blended_entry = Entry(frame1, bd=5, width=20)
-            self.blended_entry.grid(row=4, column=1, columnspan=3, padx=1, pady=1)
-            blended_button = Button(frame1, text="Enter word for Blended Image", font=("Times New Roman", 10),
-                                    command=self.blended_entry_res)
-            blended_button.grid(row=4, column=20, columnspan=3, padx=1, pady=1)
-
-            '''RANDOM IMAGE'''
-            lb4 = Label(win1, text="Enter a string to seed a random picture, or leave blank for random seed",
-                        fg='#00ff00', bg='black', font=("Courier", 14))
-            lb4.pack(side=TOP)
             frame2 = Frame(win1)
             frame2.pack(side=TOP)
-
-            self.random_entry = Entry(frame2, bd=5)
-            self.random_entry.pack(side=LEFT, fill=X)
-            random_seed_button = Button(frame2, text="Enter word for a Random image", font=("Times New Roman", 10),
-                                        command=self.random_entry_res)
-            random_seed_button.pack(side=RIGHT, fill=X)
-
-            lb5 = Label(win1, text="Enter an \"intensity\" value, or pixel density (larger = less dense)", fg='#00ff00',
-                        bg='black', font=("Courier", 14))
-            lb5.pack(side=TOP)
             frame3 = Frame(win1)
             frame3.pack(side=TOP)
+            self.blended_entry = Entry(frame, bd=5, width=20)
+            self.blended_entry.grid(row = 4, column = 1, columnspan = 3, padx = 1, pady = 1)
+            blended_button = Button(frame, text="Enter word for Blended Image", font = ("Times New Roman", 10), command = self.blended_entry_res)
+            blended_button.grid(row = 4, column = 20, columnspan = 3, padx = 1, pady = 1)
+            self.random_entry = Entry(frame2, bd=5)
+            self.random_entry.pack(side=LEFT, fill=X)
+            random_seed_button = Button(frame2, text = "Enter word for a random image", font=("Times New Roman", 10), command=self.random_entry_res)
+            random_seed_button.pack(side=RIGHT, fill=X)
             self.intensity_entry = Entry(frame3, bd=2, width=10)
             self.intensity_entry.pack(side=LEFT, fill=X)
             intenstiy_label = Label(frame3, text="Intensity Level (random image)", font=("Times New Roman", 10))
             intenstiy_label.pack(side=RIGHT, fill=X)
-        except NameError as e:
-            print(e)
-            win1 = tk.Toplevel()
 
     # Stores the results of the entry box (user input) and clears the entry box after
     # Probably should do the algorithm in this function as well
@@ -219,13 +196,13 @@ class Example(Browse):
             label.image = photo
             label.pack(side=BOTTOM)
 
-            self.negative_button = Button(frame, text="Negative Image", font=("Times New Roman", 15), command = self.add_negative(photo))
+            self.negative_button = Button(frame, text="Negative Image", font=("Times New Roman", 15), command =lambda : self.add_negative(photo))
             self.negative_button.pack(pady=10, side=LEFT)
 
-            self.hue_button = Button(frame, text="Change Image Hue", font=("Times New Roman", 15), command = self.add_hue(photo))
+            self.hue_button = Button(frame, text="Change Image Hue", font=("Times New Roman", 15), command =lambda : self.add_hue(photo))
             self.hue_button.pack(pady=10, side=RIGHT)
 
-            self.ascii_button = Button(frame, text="Convert Image to Ascii", font=("Times New Roman", 15), command = self.add_ascii(photo))
+            self.ascii_button = Button(frame, text="Convert Image to Ascii", font=("Times New Roman", 15), command =lambda : self.add_ascii(photo))
             self.ascii_button.pack(pady=10, side=RIGHT)
 
 
@@ -250,10 +227,21 @@ class Example(Browse):
             win4 = tk.Toplevel()
             win4.geometry("600x600")
             win4["bg"] = "black"
-            lb = Label(win4, text="Input Hue", fg='red', font=("Ink Free", 25))
+            lb = Label(win4, text="Select Hue", fg='red', font=("Ink Free", 25))
             lb.pack()
             frame = Frame(win4)
             frame.pack(side=TOP)
+
+            # add buttons so user can enter hue
+            self.warm_button = Button(frame, text="Add Warm Hue", font=("Times New Roman", 15),)
+            self.warm_button.pack(pady=10, side = TOP)
+
+            self.verdant_button = Button(frame, text="Add Verdant Hue", font=("Times New Roman", 15), )
+            self.verdant_button.pack(pady=10, side=BOTTOM)
+
+            self.cool_button = Button(frame, text="Add Cool Hue", font=("Times New Roman", 15), )
+            self.cool_button.pack(pady=10, side=BOTTOM)
+
 
     def add_ascii(self, img):
         try:
@@ -267,6 +255,11 @@ class Example(Browse):
             lb.pack()
             frame = Frame(win5)
             frame.pack(side=TOP)
+
+            self.intensity_entry = Entry(frame, bd=5, width=20)
+            self.intensity_entry.grid(row=4, column=1, columnspan=3, padx=1, pady=1)
+            intensity_button = Button(frame, text="Enter Intensity for Added Fun! (Ex: 100)", font=("Times New Roman", 10))
+            intensity_button.grid(row=4, column=20, columnspan=3, padx=1, pady=1)
 
 
 
