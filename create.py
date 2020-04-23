@@ -29,6 +29,7 @@ def blender(added, master, count, _w=1024, _h=768):
     return Image.blend(saved, added, a)
 
 
+'''
 # merger:
 # takes a directory of Images and uses Image.blend to combine.
 # Note: count is used for alpha values, as count increases, the prevalence of new images decreases
@@ -41,9 +42,10 @@ def merger():
         if filename.endswith(".jpg") or filename.endswith(".jpeg"):
             f_name = os.path.join('/Users/jbujarski/Desktop/Everything/Pictures/', filename)
             print(f_name)
-            master = blender(name, master, counter)
+            master = blender(Image.fromarray(load_pic(f_name)), master, counter)
             counter += 1
     view_pic(master)
+'''
 
 
 # rand_seed:
