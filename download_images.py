@@ -28,15 +28,14 @@ def search(searchword1):
 
     maxcount = 100
 
-    chromedriver = '/Users/jbujarski/PycharmProjects/proj/chromedriver'
+    chromedriver = '/Users/jbujarski/PycharmProjects/chromedriver'
 
     return maxcount, chromedriver, searchurl
 
 
 def download_google_staticimages(user_input):
     options = webdriver.ChromeOptions()
-    options.add_argument('--no-sandbox')
-    # options.add_argument('--headless')
+    options.add_argument('--headless')
 
     maxcount, chromedriver, searchurl = search(user_input)
 
@@ -49,7 +48,6 @@ def download_google_staticimages(user_input):
 
     browser.set_window_size(1280, 1024)
     browser.get(searchurl)
-    time.sleep(1)
 
     print(f'Getting you a lot of images. This may take a few moments...')
 
