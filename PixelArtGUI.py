@@ -28,7 +28,7 @@ web.title("Pixel Art Generator")
 w = Label(web, text="Welcome to the Pixel Art GUI", bg='black', fg='#00ff00', font=("Courier", 32))
 w.pack()
 
-#Creates Browse class to browse user's files for image upload
+
 class Browse(Frame):
     """ Creates a frame that contains a button when clicked lets the user to select
     a file and put its filepath into an entry.
@@ -46,7 +46,9 @@ class Example(Browse):
         Frame.__init__(self, master, *args)
         Browse.__init__(self, master, initialdir='', filetypes=())
 
-        self.image = Image.open("/Users/jbujarski/PycharmProjects/proj/pixels.jpg")
+        # image for main window background
+        self.image = Image.open("pixels.jpg")
+
         self.img_copy = self.image.copy()
         self.blended_entry = Entry()
         self.random_entry = Entry()
@@ -54,6 +56,7 @@ class Example(Browse):
         self.intensity_entry = Entry()
         self.background_image = ImageTk.PhotoImage(self.image)
 
+        # Needed to update images on window as buttons are clicked
         self.label = None
         self.img = None
 
@@ -61,7 +64,7 @@ class Example(Browse):
         self.background.pack()
         self.background.bind('<Configure>', self._resize_image)
 
-        # Buttons
+        # Buttons for main window
         frame = Frame(master)
         frame.pack(side=BOTTOM)
         self.search_word_button = Button(frame, text="Search word", highlightbackground='black', command=self.search_word)
@@ -90,10 +93,12 @@ class Example(Browse):
             lb1 = Label(win1, text="Image Search By Word", fg='#00ff00', bg='black', font=("Courier", 26))
             lb1.pack()
 
+            # This is the frame that keeps changing the photo whenever a word/button is searched/pressed
             img_frame = self.create_frame(win1)
             self.label = Label(img_frame)
             img_frame.pack(side=BOTTOM)
 
+            '''WORD SEARCH - Search for an image '''
             lb2 = Label(win1, text="Enter a word below to search for an image via Google", fg='#00ff00', bg='black',
                         font=("Courier", 14))
             lb2.pack(side=TOP)
@@ -117,7 +122,7 @@ class Example(Browse):
                                     command=lambda: self.blended_entry_res(img_frame, win1, self.label))
             blended_button.grid(row=4, column=20, columnspan=3, padx=1, pady=1)
 
-            '''RANDOM IMAGE'''
+            '''RANDOM IMAGE - produces random pixels based on string'''
             lb4 = Label(win1, text="Enter a string to seed a random picture, or leave blank for random seed",
                         fg='#00ff00', bg='black', font=("Courier", 14))
             lb4.pack(side=TOP)
@@ -142,14 +147,16 @@ class Example(Browse):
             print(e)
             win1 = tk.Toplevel()
 
+    # Needed to create frame for img_frame above to keep changing pictures
     def create_frame(self, window):
         frame = Frame(window)
         # frame.pack(side=BOTTOM)
         return frame
 
-        # Stores the results of the entry box (user input) and clears the entry box after
-        # Probably should do the algorithm in this function as well
-
+    ''' Stores the results of the entry box (user input) and clears the entry box after.
+        Takes user input and searches Google for 100 pictures and blends them together 
+        using the blender function from create.py. It then displays the blended image
+        in the window. '''
     def blended_entry_res(self, frame, window, label):
         user_input = "No results"
         user_input = self.blended_entry.get()
@@ -183,6 +190,9 @@ class Example(Browse):
 
         panel.image = img
 
+    ''' Stores the results of the entry box (user input) and clears the entry box after.
+        Takes user input and searches Google and gets the first image of the word 
+        searched. It then displays it on the window. '''
     def image_entry_res(self, frame, window, label):
         user_input = ""
         user_input = self.image_entry.get()
@@ -210,12 +220,17 @@ class Example(Browse):
         panel.photo_ref = img
         window.update()
 
+    ''' Stores the results of the entry box (user input) and clears the entry box after.
+            Takes user input and sends it in as an argument to rand_seed() function in
+             create.py. It displays a pixel image based on the string value and 
+             has an optional argument for intensity.'''
     def random_entry_res(self, frame, window, label):
         user_input = ""
         user_input = self.random_entry.get()
         print(user_input)
         self.random_entry.delete(0, END)
 
+        # Do this if there is no intensity level given
         if not self.intensity_entry.get():
             master = create.rand_seed(user_input)
             master = master.resize((300, 300), Image.ANTIALIAS)
@@ -228,6 +243,7 @@ class Example(Browse):
             panel.pack()
             panel.photo_ref = img
             window.update()
+        # do this if intensity level was given
         else:
             master = create.rand_seed(user_input, intensity=int(self.intensity_entry.get()))
             self.intensity_entry.delete(0, END)
@@ -245,22 +261,18 @@ class Example(Browse):
     # opens a new window to search for image(s)
     # by Rainie Dormanen
     def search_image(self):
-        win2 = tk.Toplevel() # create new window
+        win2 = tk.Toplevel()
         win2["bg"] = "black"
         lb = Label(win2, text="Edit Image", fg='#00ff00', bg='black', font=("Courier", 25))
         lb.pack()
         frame = Frame(win2, bg='black')
         frame.pack(side=TOP)
 
-        
-        #opens user file directory and looks for images
         filename = fd.askopenfilename(initialdir=r"C:\Users", title="Browse Images",
                                       filetypes=(('jpg files', '*.jpg',),
                                                  ('png files', '*.png'),
                                                  ('jpeg files', '*.jpeg')))
 
-        
-        # changes fphoto dimensions to fit window
         fphoto = Image.open(filename)
         _w = min(1200, fphoto.width)
         _h = min(800, fphoto.height)
