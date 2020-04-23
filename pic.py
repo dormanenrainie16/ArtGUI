@@ -11,6 +11,8 @@ load_pic = lambda name: np.array(Image.open(name))
 
 
 def view_pic(name):
-    plt.figure()
+    fig = plt.figure()
     plt.imshow(name)
+    plt.axis('off')
+    fig.tight_layout()
     plt.show()

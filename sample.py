@@ -8,10 +8,11 @@ from create import *
 
 def main():
     # Pass in a string to rand_seed
-    # master = hue("cool", rand_seed("`213456", intensity=50), intensity=50)
+    # master = hue("verdant", "pixels.jpg", intensity=1)
     # master = negative("Me&Cleo.jpg")
-    # master = asc_cond("Me&Pops.jpg", intensity=20)
-    merger()
+    # master = ascii_pic("Me&Pops.jpg", intensity=15)
+    master = asc_cond("Me&Pops.jpg", intensity=10)
+    # merger()
     # view_pic(master)
 
 
