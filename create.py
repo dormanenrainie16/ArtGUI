@@ -1,8 +1,8 @@
 # File created by J Bujarski
 # create.py contains functions to blend pictures appropriately.
 #
-#
-import os
+# Major updates: integration w/ GUI demands specific calls.
+#   May not work properly in sample.py
 import random
 
 from pic import *
@@ -27,25 +27,6 @@ def blender(added, master, count, _w=1024, _h=768):
     saved = saved.resize((_w, _h))
 
     return Image.blend(saved, added, a)
-
-
-'''
-# merger:
-# takes a directory of Images and uses Image.blend to combine.
-# Note: count is used for alpha values, as count increases, the prevalence of new images decreases
-# MUST BE UPDATED ONCE IMAGE[] IS COMPLETE
-def merger():
-    master = Image.Image()
-    counter = 1
-
-    for filename in os.listdir("/Users/jbujarski/Desktop/Everything/Pictures"):
-        if filename.endswith(".jpg") or filename.endswith(".jpeg"):
-            f_name = os.path.join('/Users/jbujarski/Desktop/Everything/Pictures/', filename)
-            print(f_name)
-            master = blender(Image.fromarray(load_pic(f_name)), master, counter)
-            counter += 1
-    view_pic(master)
-'''
 
 
 # rand_seed:
@@ -98,6 +79,7 @@ def hue(var, pic, _w=1024, _h=768, intensity=1):
             hue_pic[i, j] = color
     hue_pic = Image.fromarray((hue_pic * 255).astype(np.uint8))
     resized = Image.fromarray(load_pic(pic))
+    resized = resized.convert(mode="RGB")
     resized = resized.resize((int(pict.height), int(pict.width)))
 
     return Image.blend(resized, hue_pic, 0.5)
@@ -120,8 +102,8 @@ def negative(pic):
 
 # ascii:
 # convert a picture to a rudimentary ASCII translation
+# BOTH ASCII OUTPUTS SAVED TO LOCATION OF REF PICTURE
 def ascii_pic(pic, intensity=10):
-
     asc = Image.fromarray(load_pic(pic)).convert("L")
     asc = np.array(asc.resize((int(asc.width * 2 / intensity), int(asc.height / intensity))))
     p_name = str.split(pic, ".")
@@ -130,7 +112,7 @@ def ascii_pic(pic, intensity=10):
 
     for i in range(asc.shape[0]):
         for j in range(asc.shape[1]):
-            line = line.__add__(chr(switcher(int(asc[i, j] / 32))))  # print(line)
+            line = line.__add__(switcher(int(asc[i, j] / 32)))  # print(line)
         pic_txt.write(line + "\n")
         line = ""
 
@@ -140,20 +122,21 @@ def ascii_pic(pic, intensity=10):
 # switcher: required for unicode conversion
 def switcher(choice):
     switch = {
-        0: 32,  # space
-        1: 9624,  # "▘"
-        2: 9626,  # "▚"
-        3: 9625,  # "▙"
-        4: 9617,  # "░"
-        5: 9618,  # "▒"
-        6: 9619,  # "▓"
-        7: 9608  # "█"
+        0: " ",
+        1: "▘",
+        2: "▚",
+        3: "▙",
+        4: "░",
+        5: "▒",
+        6: "▓",
+        7: "█"
     }
     return switch.get(choice)
 
 
 # asc_cond: ascii_condensed
 # produces a more condensed version of the Ascii picture
+# 1/4 size @ same intensity
 def asc_cond(pic, intensity=1):
     asc = Image.fromarray(load_pic(pic)).convert("L")
     asc = asc.resize((int(asc.width * 2 / intensity), int(asc.height / intensity)))
@@ -166,17 +149,17 @@ def asc_cond(pic, intensity=1):
 
     for i in range(0, asc.shape[0], 2):
         for j in range(0, asc.shape[1], 2):
-            line = line.__add__(chr(adv_swtch(int(asc[i, j]),
+            line = line.__add__(adv_swtch(int(asc[i, j]),
                                               int(asc[i, j + 1]),
                                               int(asc[i + 1, j]),
-                                              int(asc[i + 1, j + 1]))))
+                                              int(asc[i + 1, j + 1])))
         pic_txt.write(line + "\n")
         line = ""
 
     return asc
-    # line = line.__add__(chr(switcher(int(asc[i, j] / 32))))  # print(line)
 
 
+# Switch required to find ASCII chars for condensed
 def adv_swtch(on, tw, th, fr):
     one = int(on / 32)
     two = int(tw / 32)
@@ -208,14 +191,14 @@ def adv_swtch(on, tw, th, fr):
     # All unique, determine which is strongest value.
     if same.__len__() == 0:
         e_zero = {
-            1: 9624,  # Block up l
-            2: 9629,  # Block up r
-            3: 9622,  # Block low l
-            4: 9621,  # Block low r
-            5: 39,  # apostrophe
-            6: 39,  # apostrophe
-            7: 46,  # period
-            8: 46  # period
+            1: "▘",  # Block up l
+            2: "▝",  # Block up r
+            3: "▖",  # Block low l
+            4: "▗",  # Block low r
+            5: "'",
+            6: "'",
+            7: ".",
+            8: "."
         }
         if prominent > 3:
             if one > two and one > three and one > four:
@@ -239,18 +222,18 @@ def adv_swtch(on, tw, th, fr):
     # 2 are equal, determine which and their intensity
     elif same.__len__() == 2:
         e_one = {
-            1: 9600,  # Upper half block
-            2: 9612,  # Left Half block
-            3: 9626,  # TL-BR block
-            4: 9630,  # TR-BL block
-            5: 9616,  # Right half block
-            6: 9604,  # Lower half block
-            7: 9620,  # Upper eighth block
-            8: 9614,  # Left quarter block
-            9: 92,  # \
-            10: 47,  # /
-            11: 9621,  # Right eighth block
-            12: 9602,  # Lower eighth block
+            1: "▀",  # Upper half block
+            2: "▌",  # Left Half block
+            3: "▚",  # TL-BR block
+            4: "▞",  # TR-BL block
+            5: "▐",  # Right half block
+            6: "▄",  # Lower half block
+            7: "▔",  # Upper eighth block
+            8: "▎",  # Left quarter block
+            9: "\\",
+            10: "/",
+            11: "▕",  # Right eighth block
+            12: "▁"  # Lower eighth block
         }
         if prominent > 3:
             if same.__contains__(1):
@@ -286,14 +269,14 @@ def adv_swtch(on, tw, th, fr):
     # 3 are equal, determine intensity and formation
     elif same.__len__() == 3:
         e_two = {
-            1: 9631,  # J block
-            2: 9625,  # L block
-            3: 9628,  # 7 block
-            4: 9627,  # F block
-            5: 74,  # J
-            6: 76,  # L
-            7: 55,  # 7
-            8: 70,  # F
+            1: "▟",  # J block
+            2: "▙",  # L block
+            3: "▜",  # 7 block
+            4: "▛",  # F block
+            5: "J",
+            6: "L",
+            7: "7",
+            8: "F"
         }
         if prominent > 3:
             if not same.__contains__(1):
@@ -317,13 +300,13 @@ def adv_swtch(on, tw, th, fr):
     # All 4 equal, determine value of one and return
     elif same.__len__() == 4:
         e_three = {
-            0: 32,  # space
-            1: 9617,  # "░"
-            2: 9617,  # "░"
-            3: 9618,  # "░"
-            4: 9618,  # "▒"
-            5: 9619,  # "░"
-            6: 9619,  # "▓"
-            7: 9608  # "█"
+            0: " ",
+            1: "░",
+            2: "░",
+            3: "░",
+            4: "▒",
+            5: "░",
+            6: "▓",
+            7: "█"
         }
         return e_three.get(one)
